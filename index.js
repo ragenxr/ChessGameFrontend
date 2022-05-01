@@ -1,7 +1,7 @@
 const routes = {
   '/statistics': {
     handler: () => import('/src/statistics.js'),
-    title: 'Рейнтинг | Tic Tac Toe',
+    title: 'Рейтинг | Tic Tac Toe',
     styleSheet: '/assets/css/statistics.css'
   },
   '/history': {
