@@ -1,7 +1,7 @@
 import nav from './nav.js';
 
 export default async(goTo) => {
-  const response = await fetch('/api/statistics?limit=15');
+  const response = await fetch('/api/statistics?limit=0');
   const {statistics} = await response.json();
   const template = document.createElement('template');
 
