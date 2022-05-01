@@ -1,18 +1,11 @@
-.rating,
-.rating__title,
-.rating__table,
-.rating__row,
-.rating__cell,
-.rating__cell_header {}
-
-.rating__cell_login {
+.rating__login {
   width: 424px;
 }
 
-.rating__cell_wins {
+.rating__wins {
   color: #69B849;
 }
 
-.rating__cell_loses {
+.rating__loses {
   color: #E93E3E;
 }

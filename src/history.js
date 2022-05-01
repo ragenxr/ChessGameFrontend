@@ -21,7 +21,7 @@ export default async(goTo) => {
 
   template.innerHTML =
     `
-      <main class="box container__content rating">
+      <main class="box container__content history">
         <h1 class="text box__title history__title">История игр</h1>
         <table class="history__table table">
           <tr class="table__row">

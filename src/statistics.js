@@ -23,10 +23,10 @@ export default async(goTo) => {
                 ({login, total, wins, loses, winRate}) =>
                   `
                     <tr class="table__cell">
-                      <th class="text table__cell rating__cell_login">${login}</th>
+                      <th class="text table__cell rating__login">${login}</th>
                       <th class="text table__cell">${total}</th>
-                      <th class="text table__cell rating__cell_wins">${wins}</th>
-                      <th class="text table__cell rating__cell_loses">${loses}</th>
+                      <th class="text table__cell rating__wins">${wins}</th>
+                      <th class="text table__cell rating__loses">${loses}</th>
                       <th class="text table__cell">${Math.round(winRate * 100)}%</th>
                     </tr>
                   `
