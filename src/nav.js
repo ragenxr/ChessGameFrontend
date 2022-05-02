@@ -16,11 +16,11 @@ export default async(goTo) => {
           ${circle}
         </div>
         <div class="nav__links">
-          <a class="text nav__link" href="/game">Игровое поле</a>
-          <a class="text nav__link" href="/statistics">Рейтинг</a>
-          <a class="text nav__link" href="/active-players">Активные игроки</a>
-          <a class="text nav__link" href="/history">История игр</a>
-          <a class="text nav__link" href="/players">Список игроков</a>
+          <a class="text text_bold nav__link" href="/game">Игровое поле</a>
+          <a class="text text_bold nav__link" href="/statistics">Рейтинг</a>
+          <a class="text text_bold nav__link" href="/active-players">Активные игроки</a>
+          <a class="text text_bold nav__link" href="/history">История игр</a>
+          <a class="text text_bold nav__link" href="/players">Список игроков</a>
         </div>
         <div class="nav__exit">
           <a>Выход</a>

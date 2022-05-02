@@ -8,6 +8,11 @@ const routes = {
     importer: () => import('/src/history.js'),
     title: 'История игр | Tic Tac Toe',
     styleSheet: '/assets/css/history.css'
+  },
+  '/players': {
+    importer: () => import('/src/players.js'),
+    title: 'Список игроков | Tic Tac Toe',
+    styleSheet: '/assets/css/players.css'
   }
 };
 

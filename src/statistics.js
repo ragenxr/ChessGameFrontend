@@ -8,14 +8,14 @@ export default async(goTo) => {
   template.innerHTML =
     `
       <main class="box container__content rating">
-        <h1 class="text box__title rating__title">Рейтинг игроков</h1>
+        <h1 class="text text_title box__header rating__title">Рейтинг игроков</h1>
         <table class="rating__table table">
           <tr class="table__row">
-            <th class="text table__cell table__cell_header">Логин</th>
-            <th class="text table__cell table__cell_header">Всего игр</th>
-            <th class="text table__cell table__cell_header">Победы</th>
-            <th class="text table__cell table__cell_header">Проигрыши</th>
-            <th class="text table__cell table__cell_header">Процент побед</th>
+            <th class="text text_bold table__cell">Логин</th>
+            <th class="text text_bold table__cell">Всего игр</th>
+            <th class="text text_bold table__cell">Победы</th>
+            <th class="text text_bold table__cell">Проигрыши</th>
+            <th class="text text_bold table__cell">Процент побед</th>
           </tr>
           ${
             statistics

@@ -22,14 +22,14 @@ export default async(goTo) => {
   template.innerHTML =
     `
       <main class="box container__content history">
-        <h1 class="text box__title history__title">История игр</h1>
+        <h1 class="text text_title box__header history__title">История игр</h1>
         <table class="history__table table">
           <tr class="table__row">
-            <th class="text table__cell table__cell_header">Игроки</th>
-            <th class="text table__cell table__cell_header"></th>
-            <th class="text table__cell table__cell_header"></th>
-            <th class="text table__cell table__cell_header">Дата</th>
-            <th class="text table__cell table__cell_header">Время игры</th>
+            <th class="text text_bold table__cell">Игроки</th>
+            <th class="text text_bold table__cell"></th>
+            <th class="text text_bold table__cell"></th>
+            <th class="text text_bold table__cell">Дата</th>
+            <th class="text text_bold table__cell">Время игры</th>
           </tr>
           ${
             games 
