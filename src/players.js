@@ -86,6 +86,7 @@ export default async(goTo) => {
     btnWrapper.firstElementChild.addEventListener(
       'click',
       (event) => {
+        //Добавить вызов API
         console.log(event.target.dataset.id);
       }
     );
