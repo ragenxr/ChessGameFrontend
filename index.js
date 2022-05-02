@@ -13,11 +13,17 @@ const routes = {
     importer: () => import('/src/players.js'),
     title: 'Список игроков | Tic Tac Toe',
     styleSheet: '/assets/css/players.css'
-  }
+  },
+  '/404': {
+    importer: () => import('/src/404.js'),
+    title: 'Страница не найдена | Tic Tac Toe',
+    styleSheet: '/assets/css/404.css'
+  },
 };
 
 const handleRoute = async(location) => {
-  const {importer, title, styleSheet} = routes[location];
+  const route = routes[location] || routes['/404'];
+  const {importer, title, styleSheet} = route;
   if (!document.head.querySelector(`link[href="${styleSheet}"]`)) {
     const cssLink = document.createElement('link');
 
@@ -31,13 +37,13 @@ const handleRoute = async(location) => {
   document.querySelector('.container').innerHTML = '';
   document.head.querySelector('title').textContent = title;
 
-  if (!routes[location].pageLoader) {
+  if (!route.pageLoader) {
     const {default: loader} = await importer();
 
-    routes[location].pageLoader = loader;
+    route.pageLoader = loader;
   }
 
-  const {pageLoader} = routes[location];
+  const {pageLoader} = route;
   const page = await pageLoader(async(newLocation) => {
     await handleRoute(newLocation);
 
@@ -48,5 +54,9 @@ const handleRoute = async(location) => {
 };
 
 window.onload = async() => {
+  window.addEventListener('popstate', async() => {
+    await handleRoute(window.location.pathname);
+  });
+
   await handleRoute(window.location.pathname);
 };
