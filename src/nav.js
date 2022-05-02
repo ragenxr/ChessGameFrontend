@@ -1,9 +1,10 @@
 export default async(goTo) => {
   const responses = await Promise.all([
     fetch('/assets/svg/cross.svg'),
-    fetch('/assets/svg/circle.svg')
+    fetch('/assets/svg/circle.svg'),
+    fetch('/assets/svg/exit.svg')
   ]);
-  const [cross, circle] = await Promise.all(responses.map((response) => response.text()));
+  const [cross, circle, exit] = await Promise.all(responses.map((response) => response.text()));
   const template = document.createElement('template');
 
   template.innerHTML =
@@ -23,7 +24,7 @@ export default async(goTo) => {
           <a class="text text_bold nav__link" href="/players">Список игроков</a>
         </div>
         <div class="nav__exit">
-          <a>Выход</a>
+          <a class="nav__exit-link">${exit}</a>
         </div>
       </nav>
     `;

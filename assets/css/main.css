@@ -100,6 +100,19 @@
   color: #FFFFFF;
 }
 
+.nav__exit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+}
+
+.nav__exit-link {
+  fill: #373745;
+}
+
 .table {}
 
 .table__row {
