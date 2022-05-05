@@ -3,48 +3,12 @@ import nav from './nav.js';
 export default async(goTo) => {
   const responses = await Promise.all([
     fetch('/assets/svg/cross.svg'),
-    fetch('/assets/svg/circle.svg')
+    fetch('/assets/svg/circle.svg'),
+    fetch('/api/games')
   ]);
-  const [cross, circle] = await Promise.all(responses.map(
+  const [cross, circle, games] = await Promise.all(responses.map(
     (response, idx) => idx !== 2 ? response.text() : response.json())
   );
-  const games = [
-    {
-      winner: 1,
-      playerOne: 'Naruto',
-      playerTwo: 'Sasuke',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      winner: null,
-      playerOne: 'Sasuke',
-      playerTwo: 'Naruto',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      winner: 2,
-      playerOne: 'Sasuke',
-      playerTwo: 'Naruto',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      winner: 2,
-      playerOne: 'Sasuke',
-      playerTwo: 'Naruto',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      winner: 2,
-      playerOne: 'Naruto',
-      playerTwo: 'Sasuke',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    }
-  ];
   const circleTemplate = document.createElement('template');
   circleTemplate.innerHTML = circle;
   circleTemplate.content.firstElementChild.classList.add('history__player-two-icon');

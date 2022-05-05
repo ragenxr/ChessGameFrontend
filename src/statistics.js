@@ -1,22 +1,8 @@
 import nav from './nav.js';
 
 export default async(goTo) => {
-  const statistics = [
-    {
-      login: 'Naruto',
-      total: 5,
-      wins: 3,
-      loses: 1,
-      winRate: 3 / 5
-    },
-    {
-      login: 'Sasuke',
-      total: 5,
-      wins: 1,
-      loses: 3,
-      winRate: 1 / 5
-    }
-  ];
+  const response = await fetch('/api/statistics');
+  const {statistics} = await response.json();
   const template = document.createElement('template');
 
   template.innerHTML =
