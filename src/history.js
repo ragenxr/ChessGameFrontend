@@ -4,7 +4,14 @@ export default async(goTo) => {
   const responses = await Promise.all([
     fetch('/assets/svg/cross.svg'),
     fetch('/assets/svg/circle.svg'),
-    fetch('/api/games')
+    fetch(
+      '/api/games?fields=id,winner,playerOne,playerTwo,createdAt,finishedAt',
+      {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      }
+    )
   ]);
   const [cross, circle, games] = await Promise.all(responses.map(
     (response, idx) => idx !== 2 ? response.text() : response.json())

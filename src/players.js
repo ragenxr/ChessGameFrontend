@@ -3,9 +3,19 @@ import nav from './nav.js';
 export default async(goTo) => {
   const responses = await Promise.all([
     fetch('/assets/svg/cancel.svg'),
-    fetch('/assets/svg/close.svg')
+    fetch('/assets/svg/close.svg'),
+    fetch(
+      '/api/users',
+      {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      }
+    )
   ]);
-  const [cancel, close] =  await Promise.all(responses.map((response) => response.text()));
+  const [cancel, close, users] = await Promise.all(responses.map(
+    (response, idx) => idx !== 2 ? response.text() : response.json())
+  )
   const cancelTemplate = document.createElement('template');
 
   cancelTemplate.innerHTML = cancel;
@@ -16,23 +26,6 @@ export default async(goTo) => {
   closeTemplate.innerHTML = close;
   closeTemplate.content.firstElementChild.classList.add('modal__close-icon');
 
-  // Заменить на вызов API
-  const users = [
-    {
-      id: 1,
-      login: 'Naruto',
-      status: 'active',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      id: 2,
-      login: 'Sasuke',
-      status: 'deleted',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    }
-  ];
   const template = document.createElement('template');
 
   template.innerHTML =
@@ -53,7 +46,7 @@ export default async(goTo) => {
           ${
             users 
               .map(
-                ({id, login, status, createdAt, updatedAt}) =>
+                ({id, login, status, createdAt = undefined, updatedAt = undefined}) =>
                   `
                     <tr class="table__cell">
                       <th class="text table__cell players__login">${login}</th>
@@ -115,7 +108,7 @@ export default async(goTo) => {
                     placeholder="Логин"
                   >
                 </div>
-                <input type="submit" class="button button_primary modal__submit" value="Добавить">
+                <input type="submit" class="button button_primary form__submit modal__submit" value="Добавить">
               </form>
             </div>
           </div>

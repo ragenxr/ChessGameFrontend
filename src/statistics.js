@@ -1,7 +1,14 @@
 import nav from './nav.js';
 
 export default async(goTo) => {
-  const response = await fetch('/api/statistics');
+  const response = await fetch(
+    '/api/statistics',
+    {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    }
+  );
   const {statistics} = await response.json();
   const template = document.createElement('template');
 

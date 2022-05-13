@@ -288,5 +288,9 @@
 }
 
 .form__field {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+}
+
+.form__submit {
+  margin-top: 8px;
 }

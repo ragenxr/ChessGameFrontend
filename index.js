@@ -14,12 +14,18 @@ const routes = {
     title: 'Список игроков | Tic Tac Toe',
     styleSheet: '/assets/css/players.css'
   },
+  '/login': {
+    importer: () => import('/src/login.js'),
+    title: 'Войти в игру | Tic Tac Toe',
+    styleSheet: '/assets/css/login.css'
+  },
   '/404': {
     importer: () => import('/src/404.js'),
     title: 'Страница не найдена | Tic Tac Toe',
     styleSheet: '/assets/css/404.css'
   },
 };
+routes['/'] = routes['/statistics'];
 
 const handleRoute = async(location) => {
   const route = routes[location] || routes['/404'];
@@ -44,19 +50,46 @@ const handleRoute = async(location) => {
   }
 
   const {pageLoader} = route;
-  const page = await pageLoader(async(newLocation) => {
-    await handleRoute(newLocation);
-
-    window.history.pushState({}, '', newLocation);
-  });
+  const page = await pageLoader(goTo);
 
   document.querySelector('.container').append(page);
 };
 
+const goTo = async(newLocation) => {
+  await handleRoute(newLocation);
+
+  history.pushState({}, '', newLocation);
+}
+
+const isLoggedIn = async() => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    return false;
+  }
+
+  const response = await fetch(
+    '/api/auth/resource',
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+  );
+
+  if (response.status >= 400) {
+    return false;
+  }
+
+  const {login} = await response.json();
+
+  return Boolean(login);
+}
+
 window.onload = async() => {
-  window.addEventListener('popstate', async() => {
-    await handleRoute(window.location.pathname);
+  addEventListener('popstate', async() => {
+    await isLoggedIn() ? await handleRoute(location.pathname) : await goTo('/login');
   });
 
-  await handleRoute(window.location.pathname);
+  await isLoggedIn() ? await handleRoute(location.pathname) : await goTo('/login');
 };

@@ -41,6 +41,18 @@ export default async(goTo) => {
     );
   }
 
+  template.content.querySelector('.nav__exit-link').addEventListener(
+    'click',
+    (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      localStorage.removeItem('token');
+
+      goTo('/login');
+    }
+  );
+
   for (const icon of template.content.querySelector('.nav__icons').children) {
     icon.classList.add('nav__icon');
   }
