@@ -1,6 +1,6 @@
 import nav from './nav.js';
 
-export default async(goTo) => {
+export default async({goTo, socket}) => {
   const responses = await Promise.all([
     fetch('/assets/svg/cancel.svg'),
     fetch('/assets/svg/close.svg'),
@@ -36,41 +36,45 @@ export default async(goTo) => {
           <button class="button button_primary players__add-new">Добавить игрока</button>
         </div>
         <table class="players__table table">
-          <tr class="table__row">
-            <th class="text text_bold table__cell">Логин</th>
-            <th class="text text_bold table__cell">Статус</th>
-            <th class="text text_bold table__cell">Создан</th>
-            <th class="text text_bold table__cell">Изменен</th>
-            <th class="text text_bold table__cell"></th>
-          </tr>
-          ${
-            users 
-              .map(
-                ({id, login, status, createdAt = undefined, updatedAt = undefined}) =>
-                  `
-                    <tr class="table__cell">
-                      <th class="text table__cell players__login">${login}</th>
-                      <th class="text table__cell">
-                        <div class="players__status players__status_${status}">
-                          ${status === 'active' ? 'Активен' : 'Заблокирован'}
-                        </div>
-                      </th>
-                      <th class="text table__cell">${new Date(createdAt).toDateString().slice(4)}</th>
-                      <th class="text table__cell">${new Date(updatedAt).toDateString().slice(4)}</th>
-                      <th class="text table__cell players__button">
-                        <button
-                          class="button button_secondary players__${status === 'active' ? 'block' : 'unblock'}"
-                          data-id="${id}"
-                        >
-                          ${status === 'active' ? cancelTemplate.innerHTML : ''}
-                          ${status === 'active' ? 'Заблокировать' : 'Разблокировать'}
-                        </button>
-                      </th>
-                    </tr>
-                  `
-              )
-              .join('')
-          }
+          <thead>
+            <tr class="table__row">
+              <th class="text text_bold table__cell">Логин</th>
+              <th class="text text_bold table__cell">Статус</th>
+              <th class="text text_bold table__cell">Создан</th>
+              <th class="text text_bold table__cell">Изменен</th>
+              <th class="text text_bold table__cell"></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${
+              users
+                .map(
+                  ({id, login, status, createdAt = undefined, updatedAt = undefined}) =>
+                    `
+                            <tr class="table__cell">
+                              <th class="text table__cell players__login">${login}</th>
+                              <th class="text table__cell">
+                                <div class="players__status players__status_${status}">
+                                  ${status === 'active' ? 'Активен' : 'Заблокирован'}
+                                </div>
+                              </th>
+                              <th class="text table__cell">${new Date(createdAt).toDateString().slice(4)}</th>
+                              <th class="text table__cell">${new Date(updatedAt).toDateString().slice(4)}</th>
+                              <th class="text table__cell players__button">
+                                <button
+                                  class="button button_secondary players__${status === 'active' ? 'block' : 'unblock'}"
+                                  data-id="${id}"
+                                >
+                                  ${status === 'active' ? cancelTemplate.innerHTML : ''}
+                                  ${status === 'active' ? 'Заблокировать' : 'Разблокировать'}
+                                </button>
+                              </th>
+                            </tr>
+                          `
+                )
+                .join('')
+            }
+          </tbody>
         </table>
       </main>
     `;
@@ -126,7 +130,7 @@ export default async(goTo) => {
     );
   }
 
-  const table = template.content.querySelector('.players__table');
+  const table = template.content.querySelector('.players__table tbody');
 
   template.content.querySelector('.players__add-new').addEventListener(
     'click',
@@ -256,7 +260,7 @@ export default async(goTo) => {
     }
   );
 
-  template.content.prepend(await nav(goTo));
+  template.content.prepend(await nav({goTo, socket}));
   template.content.querySelector('.nav__link[href="/players"]').classList.add('nav__link_active');
 
   return template.content;

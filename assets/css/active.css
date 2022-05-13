@@ -1,0 +1,32 @@
+.active-players__empty {
+  width: 700px;
+  text-align: center;
+}
+
+.active-players__login {
+  width: 340px;
+}
+
+.active-players__status {
+  color: #FFFFFF;
+  padding: 4px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.active-players__status_free {
+  background: #A8D37F;
+}
+
+.active-players__status_busy {
+  background: #87CAE8;
+}
+
+.active-players__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 60px;
+}
