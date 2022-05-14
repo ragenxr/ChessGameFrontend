@@ -22,7 +22,9 @@ export default async({goTo, socket}) => {
     `;
   const table = template.content.querySelector('.active-players__table tbody');
   const usersToSockets = {};
-  const playersListHandler = (users) => {
+  const playersListHandler = (usersFromServer) => {
+    const {sub: thisId} = JSON.parse(window.atob(localStorage.getItem('token').split('.')[1]));
+    const users = usersFromServer.filter(({id}) => id !== thisId);
     const rows = table.querySelectorAll('.table__row');
     const ids = users.map(({id}) => id);
     const existIds = Array.from(rows).map(({dataset: {id}}) => id);
