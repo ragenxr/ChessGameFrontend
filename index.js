@@ -100,7 +100,7 @@ window.onload = async() => {
   }
 
   const socket = io(
-    '/api',
+    '',
     {
       transports: ['websocket'],
       query: {
