@@ -1,4 +1,4 @@
-export default async(goTo) => {
+export default async({goTo, socket}) => {
   const responses = await Promise.all([
     fetch('/assets/svg/cross.svg'),
     fetch('/assets/svg/circle.svg'),
@@ -48,6 +48,8 @@ export default async(goTo) => {
       event.stopPropagation();
 
       localStorage.removeItem('token');
+
+      socket.disconnect();
 
       goTo('/login');
     }

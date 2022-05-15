@@ -1,11 +1,11 @@
 import nav from './nav.js';
 
-export default async(goTo) => {
+export default async({goTo, socket}) => {
   const responses = await Promise.all([
     fetch('/assets/svg/cancel.svg'),
     fetch('/assets/svg/close.svg'),
     fetch(
-      '/api/users',
+      '/api/users?fields=id,login,status,createdAt,updatedAt&limit=40&filters=status neq null',
       {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -36,54 +36,101 @@ export default async(goTo) => {
           <button class="button button_primary players__add-new">Добавить игрока</button>
         </div>
         <table class="players__table table">
-          <tr class="table__row">
-            <th class="text text_bold table__cell">Логин</th>
-            <th class="text text_bold table__cell">Статус</th>
-            <th class="text text_bold table__cell">Создан</th>
-            <th class="text text_bold table__cell">Изменен</th>
-            <th class="text text_bold table__cell"></th>
-          </tr>
-          ${
-            users 
-              .map(
-                ({id, login, status, createdAt = undefined, updatedAt = undefined}) =>
-                  `
-                    <tr class="table__cell">
-                      <th class="text table__cell players__login">${login}</th>
-                      <th class="text table__cell">
-                        <div class="players__status players__status_${status}">
-                          ${status === 'active' ? 'Активен' : 'Заблокирован'}
-                        </div>
-                      </th>
-                      <th class="text table__cell">${new Date(createdAt).toDateString().slice(4)}</th>
-                      <th class="text table__cell">${new Date(updatedAt).toDateString().slice(4)}</th>
-                      <th class="text table__cell players__button">
-                        <button
-                          class="button button_secondary players__${status === 'active' ? 'block' : 'unblock'}"
-                          data-id="${id}"
-                        >
-                          ${status === 'active' ? cancelTemplate.innerHTML : ''}
-                          ${status === 'active' ? 'Заблокировать' : 'Разблокировать'}
-                        </button>
-                      </th>
-                    </tr>
-                  `
-              )
-              .join('')
-          }
+          <thead>
+            <tr class="table__row">
+              <th class="text text_bold table__cell">Логин</th>
+              <th class="text text_bold table__cell">Статус</th>
+              <th class="text text_bold table__cell">Создан</th>
+              <th class="text text_bold table__cell">Изменен</th>
+              <th class="text text_bold table__cell"></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${
+              users
+                .map(
+                  ({id, login, status, createdAt = undefined, updatedAt = undefined}) =>
+                    `
+                            <tr class="table__cell">
+                              <th class="text table__cell players__login">${login}</th>
+                              <th class="text table__cell">
+                                <div class="players__status players__status_${status}">
+                                  ${status === 'active' ? 'Активен' : 'Заблокирован'}
+                                </div>
+                              </th>
+                              <th class="text table__cell">${new Date(createdAt).toDateString().slice(4)}</th>
+                              <th class="text table__cell">${new Date(updatedAt).toDateString().slice(4)}</th>
+                              <th class="text table__cell players__button">
+                                <button
+                                  class="button button_secondary players__${status === 'active' ? 'block' : 'unblock'}"
+                                  data-id="${id}"
+                                >
+                                  ${status === 'active' ? cancelTemplate.innerHTML : ''}
+                                  ${status === 'active' ? 'Заблокировать' : 'Разблокировать'}
+                                </button>
+                              </th>
+                            </tr>
+                          `
+                )
+                .join('')
+            }
+          </tbody>
         </table>
       </main>
     `;
 
+  const btnHandler = async(event) => {
+    const response = await fetch(
+      `/api/users/${event.target.dataset.id}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        method: 'PUT',
+        body: JSON.stringify({
+          status: event.target.classList.contains('players__block') ?
+            'deleted' :
+            'active'
+        })
+      }
+    );
+
+    if (response.status >= 400) {
+      return;
+    }
+
+    const status = event.target.parentNode.parentNode.querySelector('.players__status');
+
+    if (event.target.classList.contains('players__block')) {
+      event.target.classList.remove('players__block');
+      status.classList.remove('players__status_active');
+      event.target.classList.add('players__unblock');
+      status.classList.add('players__status_deleted');
+      status.innerHTML = 'Заблокирован';
+      event.target.innerHTML = 'Разблокировать';
+    } else {
+      event.target.classList.remove('players__unblock');
+      status.classList.remove('players__status_deleted');
+      event.target.classList.add('players__block');
+      status.classList.add('players__status_active');
+      status.innerHTML = 'Активен';
+      event.target.innerHTML =
+        `
+            ${cancelTemplate.innerHTML}
+            Заблокировать
+          `;
+    }
+  };
+
   for (const btnWrapper of template.content.querySelectorAll('.players__button')) {
     btnWrapper.firstElementChild.addEventListener(
       'click',
-      (event) => {
-        //Добавить вызов API
-        console.log(event.target.dataset.id);
-      }
+      btnHandler
     );
   }
+
+  const table = template.content.querySelector('.players__table tbody');
 
   template.content.querySelector('.players__add-new').addEventListener(
     'click',
@@ -114,7 +161,10 @@ export default async(goTo) => {
           </div>
         `;
 
-      const closeModal = (modal) => () => {
+      const closeModal = (modal) => (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
         document.body.removeChild(modal);
       };
       const closeThis = closeModal(modalTemplate.content.firstElementChild);
@@ -125,7 +175,7 @@ export default async(goTo) => {
       );
       modalTemplate.content.querySelector('.modal__submit').addEventListener(
         'click',
-        (event) => {
+        async(event) => {
           event.preventDefault();
           event.stopPropagation();
 
@@ -155,10 +205,57 @@ export default async(goTo) => {
             loginInput.classList.remove('input__textbox_errored');
           }
 
-          //Добавить вызов API
-          console.log(loginInput.value);
+          const response = await fetch(
+            `/api/users`,
+            {
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+              },
+              method: 'POST',
+              body: JSON.stringify({
+                login: loginInput.value,
+                password: 'Passw0rd'
+              })
+            }
+          );
 
-          closeThis();
+          if (response.status >= 400) {
+            return;
+          }
+
+          const {id, login, status, createdAt, updatedAt} = await response.json();
+          const rowTemplate = document.createElement('template');
+
+          rowTemplate.innerHTML =
+            `
+              <tr class="table__cell">
+                <th class="text table__cell players__login">${login}</th>
+                <th class="text table__cell">
+                  <div class="players__status players__status_${status}">
+                    ${status === 'active' ? 'Активен' : 'Заблокирован'}
+                  </div>
+                </th>
+                <th class="text table__cell">${new Date(createdAt).toDateString().slice(4)}</th>
+                <th class="text table__cell">${new Date(updatedAt).toDateString().slice(4)}</th>
+                <th class="text table__cell players__button">
+                  <button
+                    class="button button_secondary players__${status === 'active' ? 'block' : 'unblock'}"
+                    data-id="${id}"
+                  >
+                    ${status === 'active' ? cancelTemplate.innerHTML : ''}
+                    ${status === 'active' ? 'Заблокировать' : 'Разблокировать'}
+                  </button>
+                </th>
+              </tr>
+            `;
+
+          rowTemplate.content.querySelector('.players__button').firstElementChild.addEventListener(
+            'click',
+            btnHandler
+          );
+          table.append(rowTemplate.content);
+          closeThis(event);
         }
       );
 
@@ -166,7 +263,7 @@ export default async(goTo) => {
     }
   );
 
-  template.content.prepend(await nav(goTo));
+  template.content.prepend(await nav({goTo, socket}));
   template.content.querySelector('.nav__link[href="/players"]').classList.add('nav__link_active');
 
   return template.content;

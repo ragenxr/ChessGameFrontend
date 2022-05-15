@@ -294,3 +294,20 @@
 .form__submit {
   margin-top: 8px;
 }
+
+.loader__icon {
+  width: 100px;
+  height: 100px;
+  stroke: #E38BAC;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 282;
+  animation: draw;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes draw {
+  100% {
+    stroke-dashoffset: 241;
+  }
+}

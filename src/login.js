@@ -1,4 +1,4 @@
-export default async(goTo) => {
+export default async(injectables) => {
   const template = document.createElement('template');
 
   template.innerHTML =
@@ -92,7 +92,8 @@ export default async(goTo) => {
       }
 
       localStorage.setItem('token', token);
-      goTo(localStorage.getItem('ref') || '/');
+
+      await injectables.goTo(localStorage.getItem('ref') || '/');
     }
   );
 
