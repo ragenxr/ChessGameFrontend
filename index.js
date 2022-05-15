@@ -1,3 +1,5 @@
+import globalHandlers from './src/globalHandlers.js';
+
 window.onload = async() => {
   const routes = {
     '/statistics': {
@@ -92,7 +94,7 @@ window.onload = async() => {
     return Boolean(login);
   }
 
-  const socket = io(
+  const socket = localStorage.getItem('token') && io(
     '',
     {
       extraHeaders: {
@@ -103,12 +105,31 @@ window.onload = async() => {
 
   const injectables = {
     goTo,
-    socket
+    socket,
+    globalHandlers
   };
 
   addEventListener('popstate', async() => {
-    await isLoggedIn() ? await handleRoute(location.pathname) : await goTo('/login');
+    if (await isLoggedIn() || location.pathname === '/login') {
+      await handleRoute(location.pathname);
+    } else {
+      localStorage.setItem('ref', location.pathname);
+
+      await goTo('/login');
+    }
   });
 
-  await isLoggedIn() ? await handleRoute(location.pathname) : await goTo('/login');
+  const isLogged = await isLoggedIn();
+
+  if (isLogged) {
+    await globalHandlers(injectables);
+  }
+
+  if (isLogged || location.pathname === '/login') {
+    await handleRoute(location.pathname);
+  } else {
+    localStorage.setItem('ref', location.pathname);
+
+    await goTo('/login');
+  }
 };

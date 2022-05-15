@@ -1,4 +1,5 @@
 import nav from './nav.js';
+import loader from './loader.js';
 
 export default async({goTo, socket}) => {
   const template = document.createElement('template');
@@ -22,6 +23,23 @@ export default async({goTo, socket}) => {
     `;
   const table = template.content.querySelector('.active-players__table tbody');
   const usersToSockets = {};
+  const clearLoader = () => document.querySelector('.loader')?.remove();
+  const handleInvite = async(event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const loaderComponent = await loader();
+
+    document.body.append(loaderComponent);
+
+    socket.emit('players:invite', Number(event.target.parentElement.parentElement.dataset.id))
+
+    setTimeout(
+      () => {
+        socket.emit('players:cancel', Number(event.target.parentElement.parentElement.dataset.id))
+      },
+      15000);
+  };
   const playersListHandler = (usersFromServer) => {
     const {sub: thisId} = JSON.parse(window.atob(localStorage.getItem('token').split('.')[1]));
     const users = usersFromServer.filter(({id}) => id !== thisId);
@@ -61,13 +79,16 @@ export default async({goTo, socket}) => {
                 <button
                   class="button button_primary active-players__invite"
                   ${!isFree ? 'disabled' : ''}
-                  data-id="${id}"
                 >
                   Позвать играть
                 </button>
               </th>
             </tr>
           `;
+
+        rowTemplate.content
+          .querySelector('.active-players__invite')
+          .addEventListener('click', handleInvite);
 
         table.append(rowTemplate.content);
       }
@@ -109,6 +130,10 @@ export default async({goTo, socket}) => {
 };
 
   socket.on('players:list', playersListHandler);
+  socket.on('players:unavailable', clearLoader);
+  socket.on('players:cancelled', clearLoader);
+  socket.on('players:declined', clearLoader);
+  socket.on('players:accepted', clearLoader);
 
   template.content.prepend(
     await nav(

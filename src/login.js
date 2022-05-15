@@ -92,6 +92,7 @@ export default async(injectables) => {
       }
 
       localStorage.setItem('token', token);
+
       injectables.socket = io(
         '',
         {
@@ -100,7 +101,9 @@ export default async(injectables) => {
           }
         }
       );
-      injectables.goTo(localStorage.getItem('ref') || '/');
+
+      await injectables.globalHandlers(injectables);
+      await injectables.goTo(localStorage.getItem('ref') || '/');
     }
   );
 

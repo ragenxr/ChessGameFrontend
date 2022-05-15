@@ -161,7 +161,10 @@ export default async({goTo, socket}) => {
           </div>
         `;
 
-      const closeModal = (modal) => () => {
+      const closeModal = (modal) => (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
         document.body.removeChild(modal);
       };
       const closeThis = closeModal(modalTemplate.content.firstElementChild);
@@ -252,7 +255,7 @@ export default async({goTo, socket}) => {
             btnHandler
           );
           table.append(rowTemplate.content);
-          closeThis();
+          closeThis(event);
         }
       );
 
