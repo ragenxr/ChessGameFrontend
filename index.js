@@ -36,7 +36,11 @@ window.onload = async() => {
   routes['/'] = routes['/statistics'];
 
   const handleRoute = async(location) => {
-    const route = routes[location] || routes['/404'];
+    const route = routes[
+      Object.keys(routes)
+      .find((routeRegExp) => Boolean(location.match(new RegExp(routeRegExp))))
+      || '/404'
+    ];
     const {importer, title, styleSheet} = route;
     if (!document.head.querySelector(`link[href="${styleSheet}"]`)) {
       const cssLink = document.createElement('link');
