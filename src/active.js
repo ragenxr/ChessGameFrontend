@@ -120,7 +120,7 @@ export default async({goTo, socket}) => {
         `
           <tr class="table__row">
             <td class="table__cell">
-              <h3 class="active-players__empty">Никто не онлайн</h3>
+              <h3 class="text text_title active-players__empty">Никто не онлайн</h3>
             </td>
           </tr>
         `;
