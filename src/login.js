@@ -93,16 +93,6 @@ export default async(injectables) => {
 
       localStorage.setItem('token', token);
 
-      injectables.socket = io(
-        '',
-        {
-          extraHeaders: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
-
-      await injectables.globalHandlers(injectables);
       await injectables.goTo(localStorage.getItem('ref') || '/');
     }
   );

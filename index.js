@@ -98,19 +98,23 @@ window.onload = async() => {
     return Boolean(login);
   }
 
-  const socket = localStorage.getItem('token') && io(
+  const socket = io(
     '',
     {
-      extraHeaders: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      transports: ['websocket'],
+      query: {
+        token: localStorage.getItem('token')
       }
     }
   );
 
+  socket.io.on('reconnect_attempt', () => {
+    socket.io.opts.query.token = localStorage.getItem('token');
+  });
+
   const injectables = {
     goTo,
-    socket,
-    globalHandlers
+    socket
   };
 
   addEventListener('popstate', async() => {
@@ -125,9 +129,7 @@ window.onload = async() => {
 
   const isLogged = await isLoggedIn();
 
-  if (isLogged) {
-    await globalHandlers(injectables);
-  }
+  await globalHandlers(injectables);
 
   if (isLogged || location.pathname === '/login') {
     await handleRoute(location.pathname);
