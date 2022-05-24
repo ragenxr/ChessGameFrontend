@@ -5,7 +5,7 @@ export default async({goTo, socket}) => {
     fetch('/assets/svg/cross.svg'),
     fetch('/assets/svg/circle.svg'),
     fetch(
-      '/api/games?fields=id,winner,playerOne,playerTwo,createdAt,finishedAt',
+      '/api/games?fields=id,winner,playerOne,playerTwo,createdAt,finishedAt&sort=createdAt',
       {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`

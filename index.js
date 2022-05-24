@@ -33,8 +33,13 @@ window.onload = async() => {
       title: 'Страница не найдена | Tic Tac Toe',
       styleSheet: '/assets/css/404.css'
     },
+    '/game': {
+      importer: () => import('/src/game.js'),
+      title: 'Игровое поле | Tic Tac Toe',
+      styleSheet: '/assets/css/game.css'
+    }
   };
-  routes['/'] = routes['/statistics'];
+  routes['/$'] = routes['/active-players'];
 
   const handleRoute = async(location) => {
     const route = routes[
@@ -69,9 +74,9 @@ window.onload = async() => {
   };
 
   const goTo = async(newLocation) => {
-    await handleRoute(newLocation);
-
     history.pushState({}, '', newLocation);
+
+    await handleRoute(newLocation);
   }
 
   const isLoggedIn = async() => {
