@@ -2,7 +2,7 @@ import nav from './nav.js';
 
 export default async({goTo, socket}) => {
   const response = await fetch(
-    '/api/statistics',
+    '/api/statistics?limit=1000',
     {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
