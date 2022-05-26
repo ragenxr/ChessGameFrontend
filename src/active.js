@@ -41,7 +41,7 @@ export default async({goTo, socket}) => {
       15000);
   };
   const playersListHandler = (usersFromServer) => {
-    const {sub: thisId} = JSON.parse(window.atob(localStorage.getItem('token').split('.')[1]));
+    const {sub: {id: thisId}} = JSON.parse(window.atob(localStorage.getItem('token').split('.')[1]));
     const users = usersFromServer.filter(({id}) => id !== thisId);
     const rows = table.querySelectorAll('.table__row');
     const ids = users.map(({id}) => id);
