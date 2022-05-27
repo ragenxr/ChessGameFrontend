@@ -10,7 +10,12 @@
 }
 
 .container__content {
-  margin: 144px auto;
+  margin-top: 144px;
+}
+
+.container__content_centered {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .text {

@@ -1,6 +1,16 @@
 import nav from './nav.js';
 
-export default async({goTo, socket}) => {
+export default async(injectables) => {
+  const {goTo, user} = injectables;
+
+  if (!user.rights.some(({level, entity}) => entity === 'users' && Boolean(level & 1 << 0))) {
+    const empty = document.createElement('template');
+
+    await goTo('/');
+
+    return empty.content;
+  }
+
   const responses = await Promise.all([
     fetch('/assets/svg/cancel.svg'),
     fetch('/assets/svg/close.svg'),
@@ -30,7 +40,7 @@ export default async({goTo, socket}) => {
 
   template.innerHTML =
     `
-      <main class="box container__content players">
+      <main class="box container__content container__content_centered players">
         <div class="box__header">
           <h1 class="text text_title players__title">Список игроков</h1>
           <button class="button button_primary players__add-new">Добавить игрока</button>
@@ -51,26 +61,26 @@ export default async({goTo, socket}) => {
                 .map(
                   ({id, login, status, createdAt = undefined, updatedAt = undefined}) =>
                     `
-                            <tr class="table__cell">
-                              <th class="text table__cell players__login">${login}</th>
-                              <th class="text table__cell">
-                                <div class="players__status players__status_${status}">
-                                  ${status === 'active' ? 'Активен' : 'Заблокирован'}
-                                </div>
-                              </th>
-                              <th class="text table__cell">${new Date(createdAt).toDateString().slice(4)}</th>
-                              <th class="text table__cell">${new Date(updatedAt).toDateString().slice(4)}</th>
-                              <th class="text table__cell players__button">
-                                <button
-                                  class="button button_secondary players__${status === 'active' ? 'block' : 'unblock'}"
-                                  data-id="${id}"
-                                >
-                                  ${status === 'active' ? cancelTemplate.innerHTML : ''}
-                                  ${status === 'active' ? 'Заблокировать' : 'Разблокировать'}
-                                </button>
-                              </th>
-                            </tr>
-                          `
+                      <tr class="table__cell">
+                        <th class="text table__cell players__login">${login}</th>
+                        <th class="text table__cell">
+                          <div class="players__status players__status_${status}">
+                            ${status === 'active' ? 'Активен' : 'Заблокирован'}
+                          </div>
+                        </th>
+                        <th class="text table__cell">${new Date(createdAt).toDateString().slice(4)}</th>
+                        <th class="text table__cell">${new Date(updatedAt).toDateString().slice(4)}</th>
+                        <th class="text table__cell players__button">
+                          <button
+                            class="button button_secondary players__${status === 'active' ? 'block' : 'unblock'}"
+                            data-id="${id}"
+                          >
+                            ${status === 'active' ? cancelTemplate.innerHTML : ''}
+                            ${status === 'active' ? 'Заблокировать' : 'Разблокировать'}
+                          </button>
+                        </th>
+                      </tr>
+                    `
                 )
                 .join('')
             }
@@ -96,6 +106,9 @@ export default async({goTo, socket}) => {
       }
     );
 
+    if (response.status === 403) {
+      alert('Нет доступа');
+    }
     if (response.status >= 400) {
       return;
     }
@@ -117,9 +130,9 @@ export default async({goTo, socket}) => {
       status.innerHTML = 'Активен';
       event.target.innerHTML =
         `
-            ${cancelTemplate.innerHTML}
-            Заблокировать
-          `;
+          ${cancelTemplate.innerHTML}
+          Заблокировать
+        `;
     }
   };
 
@@ -220,6 +233,9 @@ export default async({goTo, socket}) => {
             }
           );
 
+          if (response.status === 403) {
+            alert('Нет доступа');
+          }
           if (response.status >= 400) {
             return;
           }
@@ -263,7 +279,7 @@ export default async({goTo, socket}) => {
     }
   );
 
-  template.content.prepend(await nav({goTo, socket}));
+  template.content.prepend(await nav(injectables));
   template.content.querySelector('.nav__link[href="/players"]').classList.add('nav__link_active');
 
   return template.content;

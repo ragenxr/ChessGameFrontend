@@ -1,12 +1,13 @@
 import nav from './nav.js';
 import loader from './loader.js';
 
-export default async({goTo, socket}) => {
+export default async(injectables) => {
+  const {socket} = injectables;
   const template = document.createElement('template');
 
   template.innerHTML =
     `
-      <main class="box container__content active-players">
+      <main class="box container__content container__content_centered active-players">
         <div class="box__header">
           <h1 class="text text_title active-players__title">Список игроков</h1>
         </div>
@@ -137,12 +138,11 @@ export default async({goTo, socket}) => {
 
   template.content.prepend(
     await nav(
+      injectables,
       {
-        goTo: async (location) => {
+        goToPreHook: async() => {
           socket.off('players:list', playersListHandler);
-          await goTo(location);
-        },
-        socket
+        }
       }
     )
   );

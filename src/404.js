@@ -1,9 +1,9 @@
-export default async(goTo) => {
+export default async() => {
   const template = document.createElement('template');
 
   template.innerHTML =
     `
-      <div class="box container__content error-404">
+      <div class="box container__content container__content_centered error-404">
         <h1 class="text text_title error-404__code">404</h1>
         <h2 class="text text_title">Страница не найдена</h2>
         <button class="button button_secondary error-404__back">Назад</button>

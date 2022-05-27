@@ -3,7 +3,7 @@ export default async(injectables) => {
 
   template.innerHTML =
     `
-      <main class="box box_sm box_centered container__content login">
+      <main class="box box_sm box_centered container__content container__content_centered login">
         <img class="login__doge" src="/assets/img/doge.png" alt="Дог">
         <h1 class="text text_title login__title">Войдите в игру</h1>
         <form class="form login__form">
@@ -91,9 +91,14 @@ export default async(injectables) => {
         return;
       }
 
-      localStorage.setItem('token', token);
+      const ref = localStorage.getItem('ref') || '/';
 
-      await injectables.goTo(localStorage.getItem('ref') || '/');
+      injectables.user = JSON.parse(window.atob(token.split('.')[1])).sub;
+
+      localStorage.setItem('token', token);
+      localStorage.removeItem('ref');
+
+      await injectables.goTo(ref);
     }
   );
 

@@ -1,6 +1,6 @@
 import nav from './nav.js';
 
-export default async({goTo, socket}) => {
+export default async(injectables) => {
   const response = await fetch(
     '/api/statistics?limit=1000',
     {
@@ -14,7 +14,7 @@ export default async({goTo, socket}) => {
 
   template.innerHTML =
     `
-      <main class="box container__content rating">
+      <main class="box container__content container__content_centered rating">
         <h1 class="text text_title box__header rating__title">Рейтинг игроков</h1>
         <table class="rating__table table">
           <thead>
@@ -48,7 +48,7 @@ export default async({goTo, socket}) => {
       </main>
     `;
 
-  template.content.prepend(await nav({goTo, socket}));
+  template.content.prepend(await nav(injectables));
   template.content.querySelector('.nav__link[href="/statistics"]').classList.add('nav__link_active');
 
   return template.content;

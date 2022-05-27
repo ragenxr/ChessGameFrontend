@@ -1,4 +1,5 @@
-export default async({goTo, socket}) => {
+export default async(injectables) => {
+  const {goTo, socket} = injectables;
   const removeInvitation = () => document.querySelector('.invitation')?.parentElement?.parentElement?.remove();
   const response = await fetch('/assets/svg/close.svg');
   const close = await response.text();

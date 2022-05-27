@@ -1,6 +1,7 @@
 import nav from './nav.js';
 
-export default async({goTo, socket}) => {
+export default async(injectables) => {
+  const {goTo, socket} = injectables;
   const responses = await Promise.all([
     fetch('/assets/svg/cross.svg'),
     fetch('/assets/svg/circle.svg'),
@@ -79,8 +80,8 @@ export default async({goTo, socket}) => {
             <div class="text chat__placeholder">Сообщений еще нет</div>
           </div>
           <div class="chat__send">
-            <div class="input">
-              <input class="input__textbox chat__send-input" placeholder="Сообщение...">
+            <div class="input chat__send-input">
+              <input class="input__textbox" placeholder="Сообщение...">
             </div>
             <button class="button button_primary chat__send-btn">
               ${sendTemplate.innerHTML}
@@ -107,7 +108,7 @@ export default async({goTo, socket}) => {
     },
     1000
   );
-  const newGoTo = (newLocation) => {
+  const goToPreHook = () => {
     clearInterval(timerRefresher);
     socket.off('games:connected', onConnected);
     socket.off('games:move-made', onMoveMade);
@@ -116,7 +117,6 @@ export default async({goTo, socket}) => {
     socket.off('games:not-invited', onNotInvited);
     socket.off('games:error', onError);
     socket.off('games:message', onReceive);
-    goTo(newLocation);
   };
   const onConnected = (gameFromRequest) => {
     game = gameFromRequest;
@@ -175,7 +175,7 @@ export default async({goTo, socket}) => {
 
     cells[Number(position)].append(symbol);
   };
-  const onFinished = ({winner, winPosition}) => {
+  const onFinished = async({winner, winPosition}) => {
     if (winner) {
       if (winPosition) {
         for (const cell of winPosition) {
@@ -192,21 +192,24 @@ export default async({goTo, socket}) => {
       alert('Ничья!');
     }
 
-    newGoTo('/');
+    goToPreHook();
+    await goTo('/');
   };
-  const onAlreadyFinished = () => {
+  const onAlreadyFinished = async() => {
     alert('Игра уже завершена!');
-    newGoTo('/');
+    goToPreHook();
+    await goTo('/');
   };
-  const onNotInvited = () => {
+  const onNotInvited = async() => {
     alert('Вы не приглашены в эту игру!');
-    newGoTo('/');
+    goToPreHook();
+    await goTo('/');
   };
   const onError = (error) => {
     alert(error);
   };
   const onReceive = ({player, message}) => {
-    const direction = player === game.playerOne ? 'left' : 'right';
+    const direction = player === game?.playerOne ? 'left' : 'right';
     const messageTemplate = document.createElement('template');
 
     messageTemplate.innerHTML =
@@ -253,22 +256,23 @@ export default async({goTo, socket}) => {
     .addEventListener(
       'click',
       () => {
-        const message = content.querySelector('.chat__send-input').value;
+        const message = content.querySelector('.chat__send-input').firstElementChild.value;
 
         if (!message) {
           return;
         }
 
-        socket.emit('games:message', game.id, message);
+        if (!game) {
+          onReceive({player: 1, message});
+        } else {
+          socket.emit('games:message', game.id, message);
+        }
 
         content.querySelector('.chat__send-input').value = '';
       }
     );
 
-  template.content.prepend(await nav({
-    goTo: newGoTo,
-    socket
-  }));
+  template.content.prepend(await nav(injectables, {goToPreHook}));
   template.content.querySelector('.nav__link[href="/game"]').classList.add('nav__link_active');
 
   return template.content;

@@ -1,6 +1,7 @@
 import nav from './nav.js';
 
-export default async({goTo, socket}) => {
+export default async(injectables) => {
+  const {goTo, socket} = injectables;
   const responses = await Promise.all([
     fetch('/assets/svg/cross.svg'),
     fetch('/assets/svg/circle.svg'),
@@ -28,7 +29,7 @@ export default async({goTo, socket}) => {
 
   template.innerHTML =
     `
-      <main class="box container__content history">
+      <main class="box container__content container__content_centered history">
         <h1 class="text text_title box__header history__title">История игр</h1>
         <table class="history__table table">
           <thead>
@@ -82,7 +83,7 @@ export default async({goTo, socket}) => {
       </main>
     `;
 
-  template.content.prepend(await nav({goTo, socket}));
+  template.content.prepend(await nav(injectables));
   template.content.querySelector('.nav__link[href="/history"]').classList.add('nav__link_active');
 
   return template.content;

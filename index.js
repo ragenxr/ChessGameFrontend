@@ -123,25 +123,19 @@ window.onload = async() => {
     socket
   };
 
-  addEventListener('popstate', async() => {
-    if (await isLoggedIn() || location.pathname === '/login') {
+  const handle = async() => {
+    if (await isLoggedIn()) {
+      injectables.user = JSON.parse(window.atob(localStorage.getItem('token').split('.')[1])).sub;
       await handleRoute(location.pathname);
     } else {
       localStorage.setItem('ref', location.pathname);
 
       await goTo('/login');
     }
-  });
+  };
 
-  const isLogged = await isLoggedIn();
+  addEventListener('popstate', handle);
 
   await globalHandlers(injectables);
-
-  if (isLogged || location.pathname === '/login') {
-    await handleRoute(location.pathname);
-  } else {
-    localStorage.setItem('ref', location.pathname);
-
-    await goTo('/login');
-  }
+  await handle();
 };

@@ -1,4 +1,4 @@
-export default async({goTo, socket}) => {
+export default async({goTo, socket, user}, {goToPreHook} = {}) => {
   const responses = await Promise.all([
     fetch('/assets/svg/cross.svg'),
     fetch('/assets/svg/circle.svg'),
@@ -21,7 +21,11 @@ export default async({goTo, socket}) => {
           <a class="text text_bold nav__link" href="/statistics">Рейтинг</a>
           <a class="text text_bold nav__link" href="/active-players">Активные игроки</a>
           <a class="text text_bold nav__link" href="/history">История игр</a>
-          <a class="text text_bold nav__link" href="/players">Список игроков</a>
+          ${
+            user.rights.some(({level, entity}) => entity === 'users' && Boolean(level & 1 << 0)) ?
+              '<a class="text text_bold nav__link" href="/players">Список игроков</a>' :
+              ''
+          }
         </div>
         <div class="nav__exit">
           <a class="nav__exit-link">${exit}</a>
@@ -32,26 +36,37 @@ export default async({goTo, socket}) => {
   for (const link of template.content.querySelector('.nav__links').children) {
     link.addEventListener(
       'click',
-      (event) => {
+      async(event) => {
         event.preventDefault();
         event.stopPropagation();
 
-        goTo(event.target.getAttribute('href'));
+        if (goToPreHook) {
+          await goToPreHook();
+        }
+
+        await goTo(event.target.getAttribute('href'));
       }
     );
   }
 
   template.content.querySelector('.nav__exit-link').addEventListener(
     'click',
-    (event) => {
+    async(event) => {
       event.preventDefault();
       event.stopPropagation();
 
       localStorage.removeItem('token');
 
-      socket.disconnect();
+      socket.io.opts.query.token = '';
 
-      goTo('/login');
+      socket.disconnect();
+      socket.connect();
+
+      if (goToPreHook) {
+        await goToPreHook();
+      }
+
+      await goTo('/login');
     }
   );
 
