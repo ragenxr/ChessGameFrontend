@@ -10,7 +10,7 @@
 }
 
 .container__content {
-  margin-top: 144px;
+  margin-top: 80px;
 }
 
 .container__content_centered {
@@ -55,9 +55,6 @@
 }
 
 .nav {
-  overflow: hidden;
-  position: fixed;
-  top: 0;
   width: calc(100% - 80px);
   display: flex;
   flex-direction: row;
@@ -67,7 +64,6 @@
   box-shadow: 0 2px 6px rgba(44, 57, 121, 0.1);
   border-radius: 0 0 16px 16px;
   padding: 16px 40px;
-  z-index: 1;
 }
 
 .nav__icons {
@@ -117,6 +113,20 @@
 
 .nav__exit-link {
   fill: #373745;
+}
+
+@media screen and (max-width: 850px) {
+  .nav {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .nav__links {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    flex-direction: column;
+  }
 }
 
 .table {}

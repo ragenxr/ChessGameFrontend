@@ -9,7 +9,7 @@
 .game__players {
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: min(500px, 100%);
   box-shadow: 0 4px 20px rgba(44, 57, 121, 0.09);
   border-radius: 20px;
   margin-right: 10px;
@@ -82,9 +82,25 @@
   margin-left: 10px;
 }
 
+@media screen and (max-width: 1200px) {
+  .game {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .game__players {
+    margin-bottom: 24px;
+  }
+
+  .game__chat {
+    margin-top: 24px;
+  }
+}
+
 @media screen and (max-width: 400px) {
   .game {
     flex-direction: column;
+    align-items: center;
     padding: 0 12px;
   }
 
@@ -209,4 +225,20 @@
 .chat__send-icon {
   width: 24px;
   height: 18px;
+}
+
+@media screen and (max-width: 1200px) {
+  .chat {
+    flex-direction: column-reverse;
+    height: 200px;
+  }
+
+  .chat__messages {
+    flex-direction: column;
+  }
+
+  .chat__placeholder {
+    margin-top: 20px;
+    margin-bottom: 0;
+  }
 }
