@@ -2,7 +2,7 @@ import * as React from 'react';
 import {observer} from 'mobx-react';
 import {StoreContext} from '../../stores';
 import {ReactComponent as LoaderIcon} from './loader.svg';
-import './styles.css';
+import cn from './styles.module.css';
 
 class ActivePlayers extends React.Component {
   static contextType = StoreContext;
@@ -21,26 +21,25 @@ class ActivePlayers extends React.Component {
                 this.context.ActivePlayersStore.activePlayers.map(
                   ({id, login, isFree}) => (
                     <tr key={id} className="table__row">
-                      <th className="text table__cell active-players__login">{login}</th>
+                      <th className={`text table__cell ${cn['active-players__login']}`}>{login}</th>
                       <th className="text table__cell active-players__status-wrapper">
                         <div
                           className={
                             [
-                              'active-players__status',
-                              `active-players__status_${isFree ? 'free' : 'busy'}`
+                              cn['active-players__status'],
+                              isFree ? cn['active-players__status_free'] : cn['active-players__status_busy']
                             ].join(' ')
                           }
                         >
                           {isFree ? 'Свободен' : 'В игре'}
                         </div>
                       </th>
-                      <th className="text table__cell active-players__button">
+                      <th className={`text table__cell ${cn['active-players__button']}`}>
                         <button
                           className={
                             [
                               'button',
                               'button_primary',
-                              'active-players__invite',
                               ...!isFree ? ['disabled'] : []
                             ].join(' ')
                           }
@@ -54,7 +53,7 @@ class ActivePlayers extends React.Component {
                 ) :
                 <tr className="table__row">
                   <td className="table__cell">
-                    <h3 className="text text_title active-players__empty">Никто не онлайн</h3>
+                    <h3 className={cn['active-players__empty']}>Никто не онлайн</h3>
                   </td>
                 </tr>
             }
