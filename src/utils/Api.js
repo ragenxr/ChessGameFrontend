@@ -20,12 +20,17 @@ class Api {
         }
       }
     );
-    const body = response.headers.get('Content-Type').indexOf('application/json') !== -1  ?
-      await response.json() :
-      await response.text();
+
+    if(!response.headers.get('Content-Type').includes('application/json')) {
+      return null;
+    }
+
+    const body = await response.json();
 
     if(response.status >= 400) {
-      throw new Error(body?.error || body);
+      console.log(body.error);
+
+      return null;
     }
 
     return body;
@@ -43,12 +48,17 @@ class Api {
         body: JSON.stringify(request)
       }
     );
-    const body = response.headers.get('Content-Type').indexOf('application/json') !== -1 ?
-      await response.json() :
-      await response.text();
+
+    if(!response.headers.get('Content-Type').includes('application/json')) {
+      return null;
+    }
+
+    const body = await response.json();
 
     if(response.status >= 400) {
-      throw new Error(body?.error || body);
+      console.log(body.error);
+
+      return null;
     }
 
     return body;
@@ -66,12 +76,17 @@ class Api {
         body: JSON.stringify(request)
       }
     );
-    const body = response.headers.get('Content-Type').indexOf('application/json') !== -1 ?
-      await response.json() :
-      await response.text();
+
+    if(!response.headers.get('Content-Type').includes('application/json')) {
+      return null;
+    }
+
+    const body = await response.json();
 
     if(response.status >= 400) {
-      throw new Error(body?.error || body);
+      console.log(body.error);
+
+      return null;
     }
 
     return true;

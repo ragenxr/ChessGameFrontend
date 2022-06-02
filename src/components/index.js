@@ -60,7 +60,7 @@ class App extends React.Component {
               routes.map(
                 ({path, component}) => (
                   <Route key={path} path={path} element={
-                    this.context.AuthStore.isLoggedIn ?
+                    true ?
                       <>
                         <Navbar routes={routes}/>
                         {component}

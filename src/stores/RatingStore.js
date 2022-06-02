@@ -17,7 +17,7 @@ class RatingStore {
   }
 
   *fetch() {
-    const {statistics} = yield new Api(this.AuthStore.token)
+    const result = yield new Api(this.AuthStore.token)
       .get(
         '/api/statistics',
         {
@@ -25,7 +25,9 @@ class RatingStore {
         }
       );
 
-    this.ratings = statistics;
+    if (result)  {
+      this.ratings = result.statistics;
+    }
   }
 }
 

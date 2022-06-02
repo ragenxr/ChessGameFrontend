@@ -51,6 +51,10 @@ class AuthStore {
   }
 
   get user() {
+    if (!this.token) {
+      return null;
+    }
+
     return JSON.parse(window.atob(this.token.split('.')[1])).sub;
   }
 
