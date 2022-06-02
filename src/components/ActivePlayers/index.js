@@ -2,7 +2,7 @@ import * as React from 'react';
 import {observer} from 'mobx-react';
 import {StoreContext} from '../../stores';
 import {ReactComponent as LoaderIcon} from './loader.svg';
-import cn from './styles.module.css';
+import cn from './styles.module.scss';
 
 class ActivePlayers extends React.Component {
   static contextType = StoreContext;

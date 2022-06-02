@@ -15,14 +15,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
 
-.active-players__status_free {
-  background: #A8D37F;
-}
+  &_free {
+    background: #A8D37F;
+  }
 
-.active-players__status_busy {
-  background: #87CAE8;
+  &_busy {
+    background: #87CAE8;
+  }
 }
 
 .active-players__button {
