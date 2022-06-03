@@ -3,12 +3,14 @@ const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const env = process.env.NODE_ENV || 'development'
+const isDev = env !== 'production';
 const styleLoader = {
   loader: env !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader
 };
 const cssModuleLoader = {
   loader: 'css-loader',
   options: {
+    sourceMap: isDev,
     modules: true
   }
 };
@@ -23,11 +25,17 @@ const postcssLoader = {
   options: {
     postcssOptions: {
       plugins: [
-        ['autoprefixer', {},]
+        autoprefixer()
       ]
     }
   }
 };
+const sassLoader = {
+  loader: 'sass-loader',
+  options: {
+    sourceMap: isDev
+  }
+}
 
 module.exports = {
   entry: './src/index.js',
@@ -66,9 +74,17 @@ module.exports = {
           styleLoader,
           cssModuleLoader,
           postcssLoader,
-          {
-            loader: 'sass-loader'
-          }
+          sassLoader
+        ]
+      },
+      {
+        test: /\.module\.scss$/i,
+        exclude: /(node_modules)/,
+        use: [
+          styleLoader,
+          cssModuleLoader,
+          postcssLoader,
+          sassLoader
         ]
       },
       {
@@ -86,15 +102,6 @@ module.exports = {
         use: [
           styleLoader,
           cssGlobalLoader,
-          postcssLoader
-        ]
-      },
-      {
-        test: /\.module\.css$/i,
-        exclude: /(node_modules)/,
-        use: [
-          styleLoader,
-          cssModuleLoader,
           postcssLoader
         ]
       },
