@@ -148,9 +148,16 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: __dirname + '/public/index.html',
       filename: 'index.html'
-    })
-  ].concat([new MiniCssExtractPlugin({
-    filename: 'static/stylesheets/[name].[fullhash:8].css',
-    chunkFilename: 'static/stylesheets/[name].[fullhash:8].css'
-  })])
+    }),
+    ...!isDev ?
+      [
+        new MiniCssExtractPlugin(
+          {
+            filename: 'static/stylesheets/[name].[fullhash:8].css',
+            chunkFilename: 'static/stylesheets/[name].[fullhash:8].css'
+          }
+        )
+      ] :
+      []
+  ]
 };
