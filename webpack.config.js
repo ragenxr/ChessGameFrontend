@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const env = process.env.NODE_ENV || 'development'
 const isDev = env !== 'production';
 const styleLoader = {
-  loader: env !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader
+  loader: isDev ? 'style-loader' : MiniCssExtractPlugin.loader
 };
 const cssModuleLoader = {
   loader: 'css-loader',
