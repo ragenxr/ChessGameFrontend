@@ -1,16 +1,10 @@
 import {action, makeObservable, observable, observe, toJS} from 'mobx';
 
 class RouterStore {
-  location = null;
+  @observable location = null;
 
   constructor(history) {
-    makeObservable(
-      this,
-      {
-        location: observable,
-        updateLocation: action
-      }
-    );
+    makeObservable(this);
 
     this.history = history;
 
@@ -34,7 +28,7 @@ class RouterStore {
     history.unsubscribe = unsubscribeFromHistory;
   }
 
-  updateLocation(location) {
+  @action updateLocation(location) {
     this.location = location;
   }
 

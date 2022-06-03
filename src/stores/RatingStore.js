@@ -2,21 +2,15 @@ import {flow, makeObservable, observable} from 'mobx';
 import Api from '../utils/Api';
 
 class RatingStore {
-  ratings = [];
+  @observable ratings = [];
 
   constructor(AuthStore) {
-    makeObservable(
-      this,
-      {
-        ratings: observable,
-        fetch: flow
-      }
-    );
+    makeObservable(this);
 
     this.AuthStore = AuthStore;
   }
 
-  *fetch() {
+  @flow *fetch() {
     const result = yield new Api(this.AuthStore.token)
       .get(
         '/api/statistics',

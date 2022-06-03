@@ -2,32 +2,12 @@ import {action, computed, flow, makeObservable, observable} from 'mobx';
 import Api from '../utils/Api';
 
 class GameStore {
-  game = null;
-  error = null;
+  @observable game = null;
+  @observable error = null;
   timer = null;
 
   constructor(AuthStore, RouterStore, socket) {
-    makeObservable(
-      this,
-      {
-        game: observable,
-        error: observable,
-        onConnected: action,
-        onMoveMade: action,
-        onFinished: action,
-        setError: action,
-        onReceive: action,
-        makeMove: action,
-        send: action,
-        increment: action,
-        close: action,
-        clearError: action,
-        clear: action,
-        fetchPlayerOneStat: flow,
-        fetchPlayerTwoStat: flow,
-        field: computed
-      }
-    );
+    makeObservable(this);
 
     this.AuthStore = AuthStore;
     this.RouterStore = RouterStore;
@@ -42,23 +22,23 @@ class GameStore {
     this.socket.on('games:message', ({player, message}) => this.onReceive(player, message));
   }
 
-  makeMove(position) {
+  @action makeMove(position) {
     this.socket.emit('games:make-move', this.game.id, position);
   }
 
-  close() {
+  @action close() {
     this.game = null;
   }
 
-  setError(error) {
+  @action setError(error) {
     this.error = error;
   }
 
-  clearError() {
+  @action clearError() {
     this.error = null;
   }
 
-  send(message) {
+  @action send(message) {
     if (!this.game) {
       return;
     }
@@ -66,7 +46,7 @@ class GameStore {
     this.socket.emit('games:message', this.game.id, message);
   }
 
-  onConnected(game) {
+  @action onConnected(game) {
     this.game = {...game, time: 0, finished: false, winner: null, winPosition: null};
     this.timer = setInterval(
       () => this.increment(),
@@ -79,11 +59,11 @@ class GameStore {
     this.RouterStore.push(`/game/${this.game.id}`, {});
   }
 
-  increment() {
+  @action increment() {
     this.game.time = this.game.time + 1;
   }
 
-  onMoveMade(position) {
+  @action onMoveMade(position) {
     if(!this.game) {
       return;
     }
@@ -91,7 +71,7 @@ class GameStore {
     this.game.moves.push({position, number: this.game.moves.length + 1});
   }
 
-  onFinished(winner, winPosition) {
+  @action onFinished(winner, winPosition) {
     if(!this.game) {
       return;
     }
@@ -103,11 +83,11 @@ class GameStore {
     clearInterval(this.timer);
   }
 
-  clear() {
+  @action clear() {
     this.game = null;
   }
 
-  onReceive(player, message) {
+  @action onReceive(player, message) {
     if(!this.game) {
       return;
     }
@@ -119,7 +99,7 @@ class GameStore {
     this.game.messages.unshift({player, message, date: new Date().toUTCString()});
   }
 
-  *fetchPlayerOneStat() {
+  @flow *fetchPlayerOneStat() {
     if(!this.game) {
       return;
     }
@@ -128,7 +108,7 @@ class GameStore {
       .get(`/api/statistics/${this.game.playerOneId}`);
   }
 
-  *fetchPlayerTwoStat() {
+  @flow *fetchPlayerTwoStat() {
     if(!this.game) {
       return;
     }
@@ -137,7 +117,7 @@ class GameStore {
       .get(`/api/statistics/${this.game.playerTwoId}`);
   }
 
-  get field() {
+  @computed get field() {
     if(!this.game) {
       return Array.from({length: 3 * 3});
     }

@@ -1,19 +1,10 @@
 import {action, autorun, computed, flow, makeObservable, observable} from 'mobx';
 
 class AuthStore {
-  token = localStorage.getItem('token');
+  @observable token = localStorage.getItem('token');
 
   constructor() {
-    makeObservable(
-      this,
-      {
-        token: observable,
-        getToken: flow,
-        logout: action,
-        user: computed,
-        isLoggedIn: computed
-      }
-    );
+    makeObservable(this);
 
     autorun(
       () => {
@@ -26,7 +17,7 @@ class AuthStore {
     );
   }
 
-  *getToken(login, password) {
+  @flow *getToken(login, password) {
     const response = yield fetch(
       '/api/auth/token',
       {
@@ -46,11 +37,11 @@ class AuthStore {
     this.token = token;
   }
 
-  logout() {
+  @action logout() {
     this.token = null;
   }
 
-  get user() {
+  @computed get user() {
     if (!this.token) {
       return null;
     }
@@ -58,7 +49,7 @@ class AuthStore {
     return JSON.parse(window.atob(this.token.split('.')[1])).sub;
   }
 
-  get isLoggedIn() {
+  @computed get isLoggedIn() {
     return Boolean(this.token);
   }
 }

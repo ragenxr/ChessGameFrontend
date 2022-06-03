@@ -1,26 +1,12 @@
 import {action, makeObservable, observable, toJS} from 'mobx';
 
 class ActivePlayersStore {
-  activePlayers = [];
-  awaitTimeout = null;
-  invitation = null;
+  @observable activePlayers = [];
+  @observable awaitTimeout = null;
+  @observable invitation = null;
 
   constructor(AuthStore, socket) {
-    makeObservable(
-      this,
-      {
-        activePlayers: observable,
-        awaitTimeout: observable,
-        invitation: observable,
-        setActivePlayers: action,
-        setInviter: action,
-        cancel: action,
-        removeInvitation: action,
-        invite: action,
-        accept: action,
-        decline: action
-      }
-    );
+    makeObservable(this);
 
     this.AuthStore = AuthStore;
     this.socket = socket;
@@ -38,11 +24,11 @@ class ActivePlayersStore {
     }
   }
 
-  setActivePlayers(activePlayers) {
+  @action setActivePlayers(activePlayers) {
     this.activePlayers = activePlayers.filter(({id}) => id !== this.AuthStore.user?.id);
   }
 
-  setInviter(from, to) {
+  @action setInviter(from, to) {
     if (this.invitation) {
       this.socket.emit('players:unavailable', {from, to});
 
@@ -52,7 +38,7 @@ class ActivePlayersStore {
     this.invitation = {from, to};
   }
 
-  invite(userId) {
+  @action invite(userId) {
     this.socket.emit('players:invite', userId);
 
     this.awaitTimeout = setTimeout(
@@ -64,15 +50,15 @@ class ActivePlayersStore {
     );
   }
 
-  accept() {
+  @action accept() {
     this.socket.emit('players:accept', this.invitation);
   }
 
-  decline() {
+  @action decline() {
     this.socket.emit('players:decline', this.invitation);
   }
 
-  cancel() {
+  @action cancel() {
     if (this.awaitTimeout) {
       const timeout = toJS(this.awaitTimeout);
 
@@ -82,7 +68,7 @@ class ActivePlayersStore {
     }
   }
 
-  removeInvitation() {
+  @action removeInvitation() {
     if (this.invitation) {
       this.invitation = null;
     }

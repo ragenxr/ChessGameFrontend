@@ -2,21 +2,15 @@ import {flow, makeObservable, observable} from 'mobx';
 import Api from '../utils/Api';
 
 class GamesStore {
-  games = [];
+  @observable games = [];
 
   constructor(AuthStore) {
-    makeObservable(
-      this,
-      {
-        games: observable,
-        fetch: flow
-      }
-    );
+    makeObservable(this);
 
     this.AuthStore = AuthStore;
   }
 
-  *fetch() {
+  @flow *fetch() {
     this.games = yield new Api(this.AuthStore.token)
       .get(
         '/api/games',
