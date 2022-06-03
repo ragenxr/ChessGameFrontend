@@ -34,11 +34,12 @@ module.exports = {
   mode: env,
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'static/js/main.js',
-    chunkFilename: 'static/js/main.[hash:8].js',
+    filename: 'static/js/main.[fullhash:8].js',
+    chunkFilename: 'static/js/main.[fullhash:8].js',
     publicPath: ''
   },
   devServer: {
+    historyApiFallback: true,
     proxy: {
       '/api': {
         target: {
@@ -117,7 +118,7 @@ module.exports = {
             loader: 'file-loader',
             options: {
               limit: 10000,
-              name: 'static/media/[name].[hash:8].[ext]'
+              name: 'static/media/[name].[fullhash:8].[ext]'
             }
           }
         ]
@@ -142,7 +143,7 @@ module.exports = {
       filename: 'index.html'
     })
   ].concat([new MiniCssExtractPlugin({
-    filename: '[name].css',
-    chunkFilename: 'static/stylesheets/[name].[hash:8].css'
+    filename: 'static/stylesheets/[name].[fullhash:8].css',
+    chunkFilename: 'static/stylesheets/[name].[fullhash:8].css'
   })])
 };
