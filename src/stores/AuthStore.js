@@ -28,7 +28,7 @@ class AuthStore {
 
   *getToken(login, password) {
     const response = yield fetch(
-      'http://localhost:12321/api/auth/token',
+      '/api/auth/token',
       {
         method: 'POST',
         body: JSON.stringify({login, password}),

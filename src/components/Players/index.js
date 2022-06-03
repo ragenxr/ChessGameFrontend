@@ -2,8 +2,8 @@ import * as React from 'react';
 import {Navigate} from 'react-router';
 import {observer} from 'mobx-react';
 import {StoreContext} from '../../stores';
-import {ReactComponent as CancelLogo} from './cancel.svg';
-import {ReactComponent as CloseLogo} from './close.svg';
+import CancelLogo from './cancel.svg';
+import CloseLogo from './close.svg';
 import './styles.css';
 
 class Players extends React.Component {

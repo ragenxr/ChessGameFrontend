@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {observer} from 'mobx-react';
 import {StoreContext} from '../../stores';
-import {ReactComponent as CrossIcon} from '../History/cross.svg';
-import {ReactComponent as CircleIcon} from '../History/circle.svg';
-import {ReactComponent as CloseLogo} from '../Players/close.svg';
-import {ReactComponent as SendIcon} from './send.svg';
+import CrossIcon from '../History/cross.svg';
+import CircleIcon from '../History/circle.svg';
+import CloseLogo from '../Players/close.svg';
+import SendIcon from './send.svg';
 import './styles.css';
 
 class Game extends React.Component {

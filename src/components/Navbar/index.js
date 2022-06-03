@@ -2,8 +2,8 @@ import * as React from 'react';
 import {observer} from 'mobx-react';
 import {NavLink} from 'react-router-dom';
 import {StoreContext} from '../../stores';
-import {ReactComponent as LogoIcon} from './logo.svg';
-import {ReactComponent as ExitIcon} from './exit.svg';
+import LogoIcon from './logo.svg';
+import ExitIcon from './exit.svg';
 import './styles.css';
 
 class Navbar extends React.Component {
@@ -12,7 +12,7 @@ class Navbar extends React.Component {
   render() {
     return (
       <nav className="nav">
-        <div className="nav__icon"><LogoIcon/></div>
+        <LogoIcon className="nav__icon"/>
         <div className="nav__links">
           {
             this.props.routes

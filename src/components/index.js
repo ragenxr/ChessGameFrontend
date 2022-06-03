@@ -10,7 +10,7 @@ import Login from './Login';
 import ActivePlayers from './ActivePlayers';
 import Game from './Game';
 import Navbar from './Navbar';
-import {ReactComponent as CloseIcon} from './Players/close.svg';
+import CloseIcon from './Players/close.svg';
 
 class App extends React.Component {
   static contextType = StoreContext;
@@ -60,7 +60,7 @@ class App extends React.Component {
               routes.map(
                 ({path, component}) => (
                   <Route key={path} path={path} element={
-                    true ?
+                    this.context.AuthStore.isLoggedIn ?
                       <>
                         <Navbar routes={routes}/>
                         {component}

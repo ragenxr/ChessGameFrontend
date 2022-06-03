@@ -46,13 +46,14 @@
 
 .game__timer {
   padding: 24px;
-  width: 205px;
+  width: 150px;
   background: #EDEDED;
   border-radius: 12px;
   font-weight: 900;
   font-size: 34px;
   line-height: 40px;
   margin-bottom: 40px;
+  text-align: center;
 }
 
 .player-stat__win-rate {

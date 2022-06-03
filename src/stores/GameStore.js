@@ -59,6 +59,10 @@ class GameStore {
   }
 
   send(message) {
+    if (!this.game) {
+      return;
+    }
+
     this.socket.emit('games:message', this.game.id, message);
   }
 
