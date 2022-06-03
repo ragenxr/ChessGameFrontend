@@ -78,11 +78,11 @@ module.exports = {
         ]
       },
       {
-        test: /\.module\.scss$/i,
-        exclude: /(node_modules)/,
+        test: /\.scss$/i,
+        exclude: /(node_modules)|(\.module)/,
         use: [
           styleLoader,
-          cssModuleLoader,
+          cssGlobalLoader,
           postcssLoader,
           sassLoader
         ]
