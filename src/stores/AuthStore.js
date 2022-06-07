@@ -1,4 +1,5 @@
 import {action, autorun, computed, flow, makeObservable, observable} from 'mobx';
+import Api from '../utils/Api';
 
 class AuthStore {
   @observable token = localStorage.getItem('token');
@@ -18,23 +19,14 @@ class AuthStore {
   }
 
   @flow *getToken(login, password) {
-    const response = yield fetch(
+    const {token} = yield new Api().post(
       '/api/auth/token',
-      {
-        method: 'POST',
-        body: JSON.stringify({login, password}),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
+      {login, password}
     );
-    const {token, error} = yield response.json();
 
-    if (!token) {
-      throw new Error(error);
+    if (token) {
+      this.token = token;
     }
-
-    this.token = token;
   }
 
   @action logout() {
@@ -46,11 +38,21 @@ class AuthStore {
       return null;
     }
 
-    return JSON.parse(window.atob(this.token.split('.')[1])).sub;
+    const [, encodedPayload,] = this.token.split('.');
+
+    if (!encodedPayload) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(window.atob(encodedPayload)).sub;
+    } catch(e) {
+      return null
+    }
   }
 
   @computed get isLoggedIn() {
-    return Boolean(this.token);
+    return Boolean(this.user);
   }
 }
 

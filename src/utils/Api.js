@@ -1,9 +1,33 @@
 class Api {
-  url = '';
-  token;
+  token = null;
 
-  constructor(token) {
+  get headers() {
+    return new Headers({
+      ...this.token ? {'Authorization': `Bearer ${this.token}`} : {},
+      'Content-Type': 'application/json'
+    });
+  }
+
+  constructor(token = null) {
     this.token = token;
+  }
+
+  async send(request) {
+    const response = await fetch(request);
+
+    if(!response.headers.get('Content-Type').includes('application/json')) {
+      return null;
+    }
+
+    const body = await response.json();
+
+    if(response.status >= 400) {
+      console.log(body.error);
+
+      return null;
+    }
+
+    return body;
   }
 
   async get(path, {fields, filters, ...rest} = {}) {
@@ -12,84 +36,42 @@ class Api {
       ...filters ? {filters: filters.join(' and ')} : {},
       ...rest
     });
-    const response = await fetch(
-      `${this.url}${path}?${params.toString()}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${this.token}`
+
+    return this.send(
+      new Request(
+        `${path}?${params.toString()}`,
+        {
+          method: 'GET',
+          headers: this.headers
         }
-      }
+      )
     );
-
-    if(!response.headers.get('Content-Type').includes('application/json')) {
-      return null;
-    }
-
-    const body = await response.json();
-
-    if(response.status >= 400) {
-      console.log(body.error);
-
-      return null;
-    }
-
-    return body;
   }
 
-  async post(path, request) {
-    const response = await fetch(
-      `${this.url}${path}`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(request)
-      }
+  async post(path, payload) {
+    return this.send(
+      new Request(
+        path,
+        {
+          method: 'POST',
+          headers: this.headers,
+          body: JSON.stringify(payload)
+        }
+      )
     );
-
-    if(!response.headers.get('Content-Type').includes('application/json')) {
-      return null;
-    }
-
-    const body = await response.json();
-
-    if(response.status >= 400) {
-      console.log(body.error);
-
-      return null;
-    }
-
-    return body;
   }
 
-  async put(path, request) {
-    const response = await fetch(
-      `${this.url}${path}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(request)
-      }
+  async put(path, payload) {
+    return this.send(
+      new Request(
+        path,
+        {
+          method: 'PUT',
+          headers: this.headers,
+          body: JSON.stringify(payload)
+        }
+      )
     );
-
-    if(!response.headers.get('Content-Type').includes('application/json')) {
-      return null;
-    }
-
-    const body = await response.json();
-
-    if(response.status >= 400) {
-      console.log(body.error);
-
-      return null;
-    }
-
-    return true;
   }
 }
 
