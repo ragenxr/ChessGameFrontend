@@ -4,16 +4,16 @@ import {NavLink} from 'react-router-dom';
 import {StoreContext} from '../../stores';
 import LogoIcon from './logo.svg';
 import ExitIcon from './exit.svg';
-import './styles.css';
+import cn from './styles.module.scss';
 
 class Navbar extends React.Component {
   static contextType = StoreContext
 
   render() {
     return (
-      <nav className="nav">
-        <LogoIcon className="nav__icon"/>
-        <div className="nav__links">
+      <nav className={cn['nav']}>
+        <LogoIcon className={cn['nav__icon']}/>
+        <div className={cn['nav__links']}>
           {
             this.props.routes
               .filter(({title}) => title)
@@ -25,8 +25,8 @@ class Navbar extends React.Component {
                     className={
                       ({isActive}) =>
                         [
-                          'nav__link',
-                          ...isActive ? ['nav__link_active'] : []
+                          cn['nav__link'],
+                          ...isActive ? [cn['nav__link_active']] : []
                         ].join(' ')
                     }
                   >
@@ -35,7 +35,9 @@ class Navbar extends React.Component {
               )
           }
         </div>
-        <a className="nav__exit"><ExitIcon width={18} height={18}/></a>
+        <a className={cn['nav__exit']} onClick={() => this.context.AuthStore.logout()}>
+          <ExitIcon width={18} height={18}/>
+        </a>
       </nav>
     );
   }

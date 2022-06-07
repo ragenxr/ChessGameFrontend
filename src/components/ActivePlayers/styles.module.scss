@@ -1,33 +1,35 @@
-.active-players__empty {
-  composes: text text_title from '../styles.css';
-  width: 700px;
-  text-align: center;
-}
-
-.active-players__login {
-  width: 340px;
-}
-
-.active-players__status {
-  color: #FFFFFF;
-  padding: 4px 12px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &_free {
-    background: #A8D37F;
+.active-players {
+  &__empty {
+    composes: text text_title from '../styles.css';
+    width: 700px;
+    text-align: center;
   }
 
-  &_busy {
-    background: #87CAE8;
+  &__login {
+    width: 340px;
   }
-}
 
-.active-players__button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 60px;
+  &__status {
+    color: #FFFFFF;
+    padding: 4px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &_free {
+      background: #A8D37F;
+    }
+
+    &_busy {
+      background: #87CAE8;
+    }
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 60px;
+  }
 }

@@ -1,0 +1,40 @@
+.history {
+  composes: box app__content app__content_centered from '../styles.css';
+
+  &__player-one,
+  &__player-two {
+    display: flex;
+    align-items: center;
+  }
+
+  &__player-one {
+    width: 500px;
+  }
+
+  &__trophy {
+    margin-left: 5px;
+    width: 24px;
+    height: 24px;
+  }
+
+  &__versus {
+    composes: text table__cell from '../styles.css';
+    font-weight: 700;
+  }
+}
+
+.player-row {
+  &__icon {
+    margin-right: 5px;
+    width: 16px;
+    height: 16px;
+
+    &_cross {
+      fill: #60C2AA;
+    }
+
+    &_circle {
+      stroke: #E38BAC;
+    }
+  }
+}

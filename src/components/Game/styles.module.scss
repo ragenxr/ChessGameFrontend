@@ -1,0 +1,262 @@
+.game {
+  composes: app__content from '../styles.css';
+  height: 100%;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  @media screen and (max-width: 1200px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 400px) {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 12px;
+  }
+
+  &__players {
+    composes: box from '../styles.css';
+    display: flex;
+    flex-direction: column;
+    width: min(500px, 100%);
+    box-shadow: 0 4px 20px rgba(44, 57, 121, 0.09);
+    border-radius: 20px;
+    margin-right: 10px;
+
+
+    @media screen and (max-width: 1200px) {
+      margin-bottom: 24px;
+    }
+    @media screen and (max-width: 400px) {
+      width: auto;
+    }
+  }
+
+  &__player-stat {
+    display: flex;
+  }
+
+  &__player-icon {
+    width: 24px;
+    height: 24px;
+
+    &_field-size {
+      width: 150px;
+      height: 150px;
+    }
+
+    &_circle {
+      stroke: #E38BAC;
+    }
+
+    &_cross {
+      fill: #60C2AA;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+  }
+
+  &__timer {
+    composes: text from '../styles.css';
+    padding: 24px;
+    width: 150px;
+    background: #EDEDED;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 34px;
+    line-height: 40px;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  &__field {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    filter: drop-shadow(0px 4px 20px rgba(44, 57, 121, 0.09));
+    gap: 4px;
+    width: min-content;
+  }
+
+  &__cell {
+    background: #FFFFFF;
+    border-radius: 12px;
+    height: 150px;
+    width: 150px;
+    padding: 10px;
+
+    &_cross-win {
+      background: #CFEDE6;
+    }
+
+    &_circle-win {
+      background: #F3BBD0;
+    }
+
+    @media screen and (max-width: 400px) {
+      height: 119px;
+      width: 119px;
+    }
+  }
+
+  &__chat {
+    height: 655px;
+    width: 352px;
+    margin-left: 10px;
+
+    @media screen and (max-width: 1200px) {
+      margin-top: 24px;
+    }
+  }
+}
+
+.player-stat {
+  &__name {
+    composes: text from '../styles.css';
+  }
+
+  &__win-rate {
+    composes: text from '../styles.css';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+
+  @media screen and (max-width: 1200px) {
+    flex-direction: column-reverse;
+    height: 200px;
+  }
+
+  &__messages {
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    padding-bottom: var(--mask-height);
+    --mask-height: 20px;
+    --scrollbar-width: 8px;
+    --mask-image-content: linear-gradient(
+                    to bottom,
+                    transparent,
+                    black var(--mask-height),
+                    black calc(100% - var(--mask-height)),
+                    transparent
+    );
+    --mask-size-content: calc(100% - var(--scrollbar-width)) 100%;
+    --mask-image-scrollbar: linear-gradient(black, black);
+    --mask-size-scrollbar: var(--scrollbar-width) 100%;
+    mask-image: var(--mask-image-content), var(--mask-image-scrollbar);
+    mask-size: var(--mask-size-content), var(--mask-size-scrollbar);
+    mask-position: 0 0, 100% 0;
+    mask-repeat: no-repeat, no-repeat;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    @media screen and (max-width: 1200px) {
+      flex-direction: column;
+    }
+  }
+
+
+  &__placeholder {
+    composes: text from '../styles.css';
+    align-self: center;
+    justify-self: center;
+    margin-bottom: 20px;
+
+    @media screen and (max-width: 1200px) {
+      margin-top: 20px;
+      margin-bottom: 0;
+    }
+  }
+
+  &__message {
+    width: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    background: #FFFFFF;
+    box-shadow: 0 2px 6px rgba(44, 57, 121, 0.1);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    margin-top: 12px;
+
+    &_left {
+      border-radius: 16px 16px 16px 0;
+      margin-right: auto;
+    }
+
+    &_right {
+      border-radius: 16px 16px 0 16px;
+      margin-left: auto;
+    }
+  }
+
+  &__message-header {
+    display: flex;
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  &__sender-name {
+    margin-right: auto;
+
+    &_left {
+      color: #60C2AA;
+    }
+
+    &_right {
+      color: #E38BAC;
+    }
+  }
+
+  &__send-date {
+    margin-left: auto;
+  }
+
+  &__send {
+    display: flex;
+    width: 100%;
+  }
+
+  &__send-input {
+    composes: input from '../styles.css';
+    width: 100%;
+  }
+
+  &__send-btn {
+    composes: button button_primary from '../styles.css';
+    margin-left: 12px;
+    padding: 12px;
+  }
+
+  &__send-icon {
+    width: 24px;
+    height: 18px;
+  }
+}
+
+.error-modal {
+  text-align: center;
+}

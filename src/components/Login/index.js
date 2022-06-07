@@ -3,7 +3,7 @@ import {Navigate} from 'react-router';
 import {observer} from 'mobx-react';
 import {StoreContext} from '../../stores';
 import dogeImg from './doge.png'
-import './styles.css';
+import cn from './styles.module.scss';
 
 class Login extends React.Component {
   static contextType = StoreContext;
@@ -37,19 +37,17 @@ class Login extends React.Component {
   render() {
     return (
       !this.context.AuthStore.isLoggedIn ?
-        <main className="box box_sm box_centered app__content app__content_centered login">
-          <img className="login__doge" src={dogeImg} alt="Дог"/>
-          <h1 className="text text_title login__title">Войдите в игру</h1>
-          <form className="form login__form">
+        <main className={cn['login']}>
+          <img className={cn['login__doge']} src={dogeImg} alt="Дог"/>
+          <h1 className="text text_title">Войдите в игру</h1>
+          <form className={cn['login__form']}>
             <div className="input form__field">
               <input
-                id="login-input"
                 type="text"
                 className={
                   [
                     'text',
                     'input__textbox',
-                    'login__login',
                     ...this.state.errors.login ? ['input__textbox_errored'] : []
                   ].join(' ')
                 }
@@ -61,13 +59,11 @@ class Login extends React.Component {
             </div>
             <div className="input form__field">
               <input
-                id="password-input"
                 type="password"
                 className={
                   [
                     'text',
                     'input__textbox',
-                    'login__login',
                     ...this.state.errors.password ? ['input__textbox_errored'] : []
                   ].join(' ')
                 }
@@ -80,7 +76,7 @@ class Login extends React.Component {
             </div>
             <input
               type="submit"
-              className="button button_primary form__submit login__submit"
+              className="button button_primary form__submit"
               value="Войти"
               onClick={this.login}
             />

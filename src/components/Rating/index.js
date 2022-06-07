@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {observer} from 'mobx-react';
 import {StoreContext} from '../../stores';
-import './styles.css';
+import cn from './styles.module.scss';
 
 class Rating extends React.Component {
   static contextType = StoreContext;
@@ -14,9 +14,9 @@ class Rating extends React.Component {
 
   render() {
     return (
-      <main className="box app__content app__content_centered rating">
-        <h1 className="text text_title box__header rating__title">Рейтинг игроков</h1>
-        <table className="rating__table table">
+      <main className={cn['rating']}>
+        <h1 className="text text_title box__header">Рейтинг игроков</h1>
+        <table className="table">
           <thead>
           <tr className="table__row">
             <th className="text text_bold table__cell">Логин</th>
@@ -32,10 +32,10 @@ class Rating extends React.Component {
               ?.map(
                 (rating) => (
                   <tr key={rating.login} className="table__cell">
-                    <th className="text table__cell rating__login">{rating.login}</th>
+                    <th className={cn['rating__login']}>{rating.login}</th>
                     <th className="text table__cell">{rating.total}</th>
-                    <th className="text table__cell rating__wins">{rating.wins}</th>
-                    <th className="text table__cell rating__loses">{rating.loses}</th>
+                    <th className={cn['rating__wins']}>{rating.wins}</th>
+                    <th className={cn['rating__loses']}>{rating.loses}</th>
                     <th className="text table__cell">{Math.round(rating.winRate * 100)}%</th>
                   </tr>
                 )

@@ -4,7 +4,7 @@ import {observer} from 'mobx-react';
 import {StoreContext} from '../../stores';
 import CancelLogo from './cancel.svg';
 import CloseLogo from './close.svg';
-import './styles.css';
+import cn from './styles.module.scss';
 
 class Players extends React.Component {
   static contextType = StoreContext;
@@ -34,17 +34,17 @@ class Players extends React.Component {
     return (
       <>
         {!this.context.UsersStore.hasAccess && <Navigate to="/" replace/>}
-        <main className="box app__content app__content_centered players">
+        <main className={cn['players']}>
           <div className="box__header">
-            <h1 className="text text_title players__title">Список игроков</h1>
+            <h1 className="text text_title">Список игроков</h1>
             <button
-              className="button button_primary players__add-new"
+              className="button button_primary"
               onClick={() => this.setState({isVisibleModal: true})}
             >
               Добавить игрока
             </button>
           </div>
-          <table className="players__table table">
+          <table className="table">
             <thead>
             <tr className="table__row">
               <th className="text text_bold table__cell">Логин</th>
@@ -60,12 +60,12 @@ class Players extends React.Component {
                 ?.map(
                   ({id, login, status, createdAt, updatedAt}) => (
                     <tr key={id} className="table__cell">
-                      <th className="text table__cell players__login">{login}</th>
+                      <th className={cn['players__login']}>{login}</th>
                       <th className="text table__cell">
                         <div className={
                           [
-                            'players__status',
-                            `players__status_${status}`
+                            cn['players__status'],
+                            cn[`players__status_${status}`]
                           ].join(' ')
                         }
                         >
@@ -74,13 +74,12 @@ class Players extends React.Component {
                       </th>
                       <th className="text table__cell">{new Date(createdAt).toDateString().slice(4)}</th>
                       <th className="text table__cell">{new Date(updatedAt).toDateString().slice(4)}</th>
-                      <th className="text table__cell players__button">
+                      <th className={cn['players__button']}>
                         <button
                           className={
                             [
                               'button',
-                              'button_secondary',
-                              `players__${status === 'active' ? 'block' : 'unblock'}`
+                              'button_secondary'
                             ].join(' ')
                           }
                           onClick={

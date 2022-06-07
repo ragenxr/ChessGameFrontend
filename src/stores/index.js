@@ -26,12 +26,9 @@ export class Store {
     this.history = createBrowserHistory();
     this.RouterStore = new RouterStore(this.history);
     this.AuthStore = new AuthStore();
-    this.RatingStore = new RatingStore(this.AuthStore);
-    this.UsersStore = new UsersStore(this.AuthStore);
-    this.GamesStore = new GamesStore(this.AuthStore);
 
     this.socket = io(
-      'ws://localhost:12321',
+      '',
       {
         transports: ['websocket'],
         query: {
@@ -55,6 +52,9 @@ export class Store {
       }
     );
 
+    this.RatingStore = new RatingStore(this.AuthStore);
+    this.UsersStore = new UsersStore(this.AuthStore);
+    this.GamesStore = new GamesStore(this.AuthStore);
     this.ActivePlayersStore = new ActivePlayersStore(this.AuthStore, this.socket);
     this.GameStore = new GameStore(this.AuthStore, this.RouterStore, this.socket);
   }

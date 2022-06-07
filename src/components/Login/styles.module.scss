@@ -1,0 +1,20 @@
+.login {
+  composes: box box_sm box_centered app__content app__content_centered from '../styles.css';
+  min-width: 352px;
+  padding: 40px 24px;
+  border-radius: 16px;
+  align-items: center;
+
+  &__doge {
+    margin-bottom: 20px;
+  }
+
+  &__form {
+    composes: form from '../styles.css';
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 20px;
+  }
+}

@@ -5,7 +5,7 @@ import CrossIcon from '../History/cross.svg';
 import CircleIcon from '../History/circle.svg';
 import CloseLogo from '../Players/close.svg';
 import SendIcon from './send.svg';
-import './styles.css';
+import cn from './styles.module.scss';
 
 class Game extends React.Component {
   static contextType = StoreContext;
@@ -18,21 +18,20 @@ class Game extends React.Component {
     };
   }
 
-
   render() {
     return (
       <>
-        <div className="app__content game">
-          <aside className="box game__players">
+        <div className={cn['game']}>
+          <aside className={cn['game__players']}>
             <h1 className="text text_title">Игроки</h1>
-            <div className="game__player-stat">
+            <div className={cn['game__player-stat']}>
               {
                 this.context.GameStore.game?.playerOne &&
                 <>
-                  <CrossIcon className="game__player-icon game__player-icon_cross"/>
-                  <div>
-                    <p className="text player-stat__name">{this.context.GameStore.game?.playerOne}</p>
-                    <small className="text player-stat__win-rate">
+                  <CrossIcon className={`${cn['game__player-icon']} ${cn['game__player-icon_cross']}`}/>
+                  <div className={cn['player-stat']}>
+                    <p className={cn['player-stat__name']}>{this.context.GameStore.game?.playerOne}</p>
+                    <small className={cn['player-stat__win-rate']}>
                       {
                         this.context.GameStore.game?.playerOneStat?.winRate &&
                         `${Math.round(this.context.GameStore.game?.playerOneStat?.winRate * 100)}%`
@@ -42,14 +41,14 @@ class Game extends React.Component {
                 </>
               }
             </div>
-            <div className="game__player-stat">
+            <div className={cn['game__player-stat']}>
               {
                 this.context.GameStore.game?.playerTwo &&
                 <>
-                  <CircleIcon className="game__player-icon game__player-icon_circle"/>
-                  <div>
-                    <p className="text player-stat__name">{this.context.GameStore.game?.playerTwo}</p>
-                    <small className="text player-stat__win-rate">
+                  <CrossIcon className={`${cn['game__player-icon']} ${cn['game__player-icon_circle']}`}/>
+                  <div className={cn['player-stat']}>
+                    <p className={cn['player-stat__name']}>{this.context.GameStore.game?.playerTwo}</p>
+                    <small className={cn['player-stat__win-rate']}>
                       {
                         this.context.GameStore.game?.playerTwoStat?.winRate &&
                         `${Math.round(this.context.GameStore.game?.playerTwoStat?.winRate * 100)}%`
@@ -60,8 +59,8 @@ class Game extends React.Component {
               }
             </div>
           </aside>
-          <div className="game__info">
-            <div className="text game__timer">
+          <div className={cn['game__info']}>
+            <div className={cn['game__timer']}>
               {
                 this.context.GameStore.game?.time ?
                   new Date(this.context.GameStore.game.time * 1000)
@@ -70,7 +69,7 @@ class Game extends React.Component {
                   '00:00:00'
               }
             </div>
-            <main className="game__field tic-tac-toe-field">
+            <main className={cn['game__field']}>
               {
                 this.context.GameStore.field.map(
                   (value, idx) =>
@@ -78,12 +77,12 @@ class Game extends React.Component {
                       key={idx}
                       className={
                         [
-                          'tic-tac-toe-field__cell',
+                          cn['game__cell'],
                           ...this.context.GameStore.game?.winPosition?.includes(idx) ?
                             [
                               this.context.GameStore.game.winner === this.context.GameStore.game.playerOne ?
-                                'tic-tac-toe-field__cell_cross-win' :
-                                'tic-tac-toe-field__cell_circle-win'
+                                cn['game__cell_cross-win'] :
+                                cn['game__cell_circle-win']
                             ] :
                             []
                         ].join(' ')
@@ -95,10 +94,22 @@ class Game extends React.Component {
                         (
                           value === 'X' ?
                             <CrossIcon
-                              className="game__player-icon game__player-icon_cross game__player-icon_field-size"
+                              className={
+                                [
+                                  cn['game__player-icon'],
+                                  cn['game__player-icon_cross'],
+                                  cn['game__player-icon_field-size']
+                                ].join(' ')
+                              }
                             /> :
                             <CircleIcon
-                              className="game__player-icon game__player-icon_circle game__player-icon_field-size"
+                              className={
+                                [
+                                  cn['game__player-icon'],
+                                  cn['game__player-icon_circle'],
+                                  cn['game__player-icon_field-size']
+                                ].join(' ')
+                              }
                             />
                         )
                       }
@@ -107,8 +118,8 @@ class Game extends React.Component {
               }
             </main>
           </div>
-          <aside className="game__chat chat">
-            <div className="chat__messages">
+          <aside className={`${cn['game__chat']} ${cn['chat']}`}>
+            <div className={cn['chat__messages']}>
               {
                 this.context.GameStore.game?.messages?.length ?
                   this.context.GameStore.game.messages.map(
@@ -117,36 +128,36 @@ class Game extends React.Component {
                         key={date}
                         className={
                           [
-                            'chat__message',
+                            cn['chat__message'],
                             player === this.context.GameStore.game.playerOne ?
-                              'chat__message_left' :
-                              'chat__message_right'
+                              cn['chat__message_left'] :
+                              cn['chat__message_right']
                           ].join(' ')
                         }
                       >
-                        <div className="chat__message-header">
+                        <div className={cn['chat__message-header']}>
                           <p
                             className={
                               [
-                                'chat__sender-name',
+                                cn['chat__sender-name'],
                                 player === this.context.GameStore.game.playerOne ?
-                                  'chat__sender-name_left' :
-                                  'chat__sender-name_right'
+                                  cn['chat__sender-name_left'] :
+                                  cn['chat__sender-name_right']
                               ].join(' ')
                             }
                           >
                             {player}
                           </p>
-                          <p className="chat__send-time">{date.match(/(\d\d:\d\d):\d\d/)[1]}</p>
+                          <p>{date.match(/(\d\d:\d\d):\d\d/)[1]}</p>
                         </div>
-                        <p className="chat__message-text">{message}</p>
+                        <p>{message}</p>
                       </div>
                   ) :
-                  <div className="text chat__placeholder">Сообщений еще нет</div>
+                  <div className={cn['chat__placeholder']}>Сообщений еще нет</div>
               }
             </div>
-            <div className="chat__send">
-              <div className="input chat__send-input">
+            <div className={cn['chat__send']}>
+              <div className={cn['chat__send-input']}>
                 <input
                   className="input__textbox"
                   placeholder="Сообщение..."
@@ -155,7 +166,7 @@ class Game extends React.Component {
                 />
               </div>
               <button
-                className="button button_primary chat__send-btn"
+                className={cn['chat__send-btn']}
                 onClick={(e) => {
                   e.preventDefault();
 
@@ -168,7 +179,7 @@ class Game extends React.Component {
                   this.setState({message: ''});
                 }}
               >
-                <SendIcon className="chat__send-icon"/>
+                <SendIcon className={cn['chat__send-icon']}/>
               </button>
             </div>
           </aside>

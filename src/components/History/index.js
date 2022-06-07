@@ -4,7 +4,7 @@ import {StoreContext} from '../../stores';
 import CircleIcon from './circle.svg';
 import CrossIcon from './cross.svg';
 import trophyImg from './trophy.png';
-import './styles.css';
+import cn from './styles.module.scss';
 
 class History extends React.Component {
   static contextType = StoreContext;
@@ -17,9 +17,9 @@ class History extends React.Component {
 
   render() {
     return (
-      <main className="box app__content app__content_centered history">
-        <h1 className="text text_title box__header history__title">История игр</h1>
-        <table className="history__table table">
+      <main className={cn['history']}>
+        <h1 className="text text_title box__header">История игр</h1>
+        <table className="table">
           <thead>
           <tr className="table__row">
             <th className="text text_bold table__cell">Игроки</th>
@@ -35,21 +35,21 @@ class History extends React.Component {
               ?.map(
                 ({winner, playerOne, playerTwo, createdAt, finishedAt}) => (
                   <tr className="table__cell">
-                    <th className="text table__cell history__player-two">
-                      {<CircleIcon className="history__player-two-icon"/>}
+                    <th className={`${cn['history__player-two']} ${cn['player-row']}`}>
+                      {<CircleIcon className={`${cn['player-row__icon']} ${cn['player-row__icon_circle']}`}/>}
                       {playerTwo}
                       {
                         winner === 2 &&
-                        <img className="history__trophy" src={trophyImg} alt="Победитель"/>
+                        <img className={cn['history__trophy']} src={trophyImg} alt="Победитель"/>
                       }
                     </th>
-                    <th className="text table__cell history__versus">против</th>
-                    <th className="text table__cell history__player-one">
-                      {<CrossIcon className="history__player-one-icon"/>}
+                    <th className={cn['history__versus']}>против</th>
+                    <th className={`${cn['history__player-two']} ${cn['player-row']}`}>
+                      {<CrossIcon className={`${cn['player-row__icon']} ${cn['player-row__icon_cross']}`}/>}
                       {playerOne}
                       {
                         winner === 1 &&
-                        <img className="history__trophy" src={trophyImg} alt="Победитель"/>
+                        <img className={cn['history__trophy']} src={trophyImg} alt="Победитель"/>
                       }
                     </th>
                     <th className="text table__cell">{new Date(createdAt).toDateString().slice(4)}</th>

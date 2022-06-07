@@ -34,7 +34,7 @@
     "webpack-dev-server": "4.9.1"
   },
   "scripts": {
-    "start": "npx webpack-dev-server",
+    "start": "npx webpack serve",
     "build": "NODE_ENV=production npx webpack build"
   },
   "eslintConfig": {
