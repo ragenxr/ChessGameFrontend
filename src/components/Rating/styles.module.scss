@@ -1,0 +1,18 @@
+.rating {
+  composes: box app__content app__content_centered from '../styles.css';
+
+  &__login {
+    composes: text table__cell from '../styles.css';
+    width: 424px;
+  }
+
+  &__wins {
+    composes: text table__cell from '../styles.css';
+    color: #69B849;
+  }
+
+  &__loses {
+    composes: text table__cell from '../styles.css';
+    color: #E93E3E;
+  }
+}

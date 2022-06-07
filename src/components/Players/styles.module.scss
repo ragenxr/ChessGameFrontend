@@ -1,0 +1,42 @@
+.players {
+  composes: box app__content app__content_centered from '../styles.css';
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &__login {
+    composes: text table__cell from '../styles.css';
+    width: 600px;
+  }
+
+  &__status {
+    color: #FFFFFF;
+    padding: 4px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 130px;
+
+    &_active {
+      background: #A8D37F;
+    }
+
+    &_deleted {
+      background: #EC7777;
+    }
+  }
+
+  &__button {
+    composes: text table__cell from '../styles.css';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 48px;
+  }
+}
