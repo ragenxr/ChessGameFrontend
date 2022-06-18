@@ -1,21 +1,11 @@
-import {action, autorun, computed, flow, makeObservable, observable} from 'mobx';
+import {action, computed, flow, makeObservable, observable} from 'mobx';
 import Api from '../utils/Api';
 
 class AuthStore {
-  @observable token = localStorage.getItem('token');
+  @observable token = null;
 
   constructor() {
     makeObservable(this);
-
-    autorun(
-      () => {
-        if (this.token) {
-          localStorage.setItem('token', this.token);
-        } else {
-          localStorage.removeItem('token');
-        }
-      }
-    );
   }
 
   @flow *getToken(login, password) {
@@ -23,6 +13,14 @@ class AuthStore {
       '/api/auth/token',
       {login, password}
     );
+
+    if (token) {
+      this.token = token;
+    }
+  }
+
+  @flow *login() {
+    const {token} = yield new Api().get('/api/auth/resource');
 
     if (token) {
       this.token = token;

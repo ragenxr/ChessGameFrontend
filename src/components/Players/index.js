@@ -6,6 +6,7 @@ import CancelLogo from './cancel.svg';
 import CloseLogo from './close.svg';
 import cn from './styles.module.scss';
 
+@observer
 class Players extends React.Component {
   static contextType = StoreContext;
 
@@ -144,4 +145,4 @@ class Players extends React.Component {
   }
 }
 
-export default observer(Players)
+export default Players;

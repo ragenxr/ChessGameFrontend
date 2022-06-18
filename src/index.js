@@ -7,9 +7,7 @@ import {Store, StoreContext} from './stores';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-  <StoreContext.Provider value={new Store()}>
-    <React.StrictMode>
+    <StoreContext.Provider value={new Store()}>
       <App/>
-    </React.StrictMode>
   </StoreContext.Provider>
 );

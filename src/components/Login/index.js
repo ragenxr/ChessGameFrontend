@@ -5,6 +5,7 @@ import {StoreContext} from '../../stores';
 import dogeImg from './doge.png'
 import cn from './styles.module.scss';
 
+@observer
 class Login extends React.Component {
   static contextType = StoreContext;
 
@@ -87,4 +88,4 @@ class Login extends React.Component {
   }
 }
 
-export default observer(Login);
+export default Login;

@@ -6,6 +6,7 @@ import LogoIcon from './logo.svg';
 import ExitIcon from './exit.svg';
 import cn from './styles.module.scss';
 
+@observer
 class Navbar extends React.Component {
   static contextType = StoreContext
 
@@ -43,4 +44,4 @@ class Navbar extends React.Component {
   }
 }
 
-export default observer(Navbar);
+export default Navbar;

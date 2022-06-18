@@ -4,6 +4,7 @@ import {StoreContext} from '../../stores';
 import LoaderIcon from './loader.svg';
 import cn from './styles.module.scss';
 
+@observer
 class ActivePlayers extends React.Component {
   static contextType = StoreContext;
 
@@ -71,4 +72,4 @@ class ActivePlayers extends React.Component {
   }
 }
 
-export default observer(ActivePlayers);
+export default ActivePlayers;

@@ -50,11 +50,12 @@ module.exports = {
     historyApiFallback: true,
     proxy: {
       '/api': {
-        target: {
-          host: 'localhost',
-          protocol: 'http:',
-          port: 12321
-        }
+        target: 'http://localhost:12321',
+        pathRewrite: { '^/api': '' },
+      },
+      '/socket.io': {
+        target: 'ws://localhost:12321',
+        ws: true
       }
     }
   },

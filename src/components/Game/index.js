@@ -7,6 +7,7 @@ import CloseLogo from '../Players/close.svg';
 import SendIcon from './send.svg';
 import cn from './styles.module.scss';
 
+@observer
 class Game extends React.Component {
   static contextType = StoreContext;
 
@@ -231,4 +232,4 @@ class Game extends React.Component {
   }
 }
 
-export default observer(Game);
+export default Game;

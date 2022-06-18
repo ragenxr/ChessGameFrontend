@@ -12,14 +12,22 @@ import Game from './Game';
 import Navbar from './Navbar';
 import CloseIcon from './Players/close.svg';
 
+@observer
 class App extends React.Component {
   static contextType = StoreContext;
 
+  async componentDidMount() {
+    if(!this.context.AuthStore.token) {
+      await this.context.AuthStore.login();
+    }
+  }
+
   render() {
+    const context = this.context;
     const routes = [
       {
         path: '/game/:id',
-        getParam: () => this.context.GameStore.game?.id,
+        getParam: () => context.GameStore.game?.id,
         title: 'Игровое поле',
         component: <Game/>
       },
@@ -51,7 +59,7 @@ class App extends React.Component {
     ];
 
     return (
-      <Router location={this.context.RouterStore.location} navigator={this.context.RouterStore.history}>
+      <Router location={context.RouterStore.location} navigator={context.RouterStore.history}>
         <div className="app">
           <Routes>
             <Route index element={<Navigate to="/rating" replace/>}/>
@@ -60,7 +68,7 @@ class App extends React.Component {
               routes.map(
                 ({path, component}) => (
                   <Route key={path} path={path} element={
-                    this.context.AuthStore.isLoggedIn ?
+                    context.AuthStore.isLoggedIn ?
                       <>
                         <Navbar routes={routes}/>
                         {component}
@@ -72,19 +80,19 @@ class App extends React.Component {
             }
           </Routes>
           {
-            this.context.ActivePlayersStore.invitation &&
+            context.ActivePlayersStore.invitation &&
             <div className="modal">
               <div className="modal__window">
                 <div className="modal__header">
                   <button
                     className="modal__close"
-                    onClick={() => this.context.ActivePlayersStore.decline()}
+                    onClick={() => context.ActivePlayersStore.decline()}
                   >
                     <CloseIcon className="modal__close-icon"/>
                   </button>
                 </div>
                 <h1 className="text text_title modal__title">
-                  {this.context.ActivePlayersStore.invitation?.from?.login} приглашает вас в игру!
+                  {context.ActivePlayersStore.invitation?.from?.login} приглашает вас в игру!
                 </h1>
                 <form className="modal__content form invitation">
                   <input
@@ -94,7 +102,7 @@ class App extends React.Component {
                     onClick={(e) => {
                       e.preventDefault();
 
-                      this.context.ActivePlayersStore.accept()
+                      context.ActivePlayersStore.accept()
                     }}
                   />
                   <input
@@ -104,7 +112,7 @@ class App extends React.Component {
                     onClick={(e) => {
                       e.preventDefault();
 
-                      this.context.ActivePlayersStore.decline()
+                      context.ActivePlayersStore.decline()
                     }}
                   />
                 </form>
@@ -118,4 +126,4 @@ class App extends React.Component {
 }
 
 
-export default observer(App);
+export default App;

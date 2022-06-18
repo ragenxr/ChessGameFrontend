@@ -3,6 +3,7 @@ import {observer} from 'mobx-react';
 import {StoreContext} from '../../stores';
 import cn from './styles.module.scss';
 
+@observer
 class Rating extends React.Component {
   static contextType = StoreContext;
 
@@ -48,4 +49,4 @@ class Rating extends React.Component {
   }
 }
 
-export default observer(Rating);
+export default Rating;

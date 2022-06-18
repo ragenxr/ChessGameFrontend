@@ -6,6 +6,7 @@ import CrossIcon from './cross.svg';
 import trophyImg from './trophy.png';
 import cn from './styles.module.scss';
 
+@observer
 class History extends React.Component {
   static contextType = StoreContext;
 
@@ -71,4 +72,4 @@ class History extends React.Component {
   }
 }
 
-export default observer(History);
+export default History;
