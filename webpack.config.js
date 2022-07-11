@@ -114,19 +114,14 @@ module.exports = {
             loader: 'url-loader',
             options: {
               limit: 10000,
-              name: 'static/media/[name].[hash:8].[ext]'
-            }
-          }
-        ]
-      },
-      {
-        exclude: /(node_modules)|(\.(js|jsx|html|scss|css|svg)$)/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              limit: 10000,
-              name: 'static/media/[name].[fullhash:8].[ext]'
+              fallback:
+                {
+                  loader: 'file-loader',
+                  options: {
+                    limit: 10000,
+                    name: 'static/media/[name].[hash:8].[ext]'
+                  }
+                }
             }
           }
         ]

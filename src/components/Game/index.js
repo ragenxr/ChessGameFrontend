@@ -6,6 +6,7 @@ import CircleIcon from '../History/circle.svg';
 import CloseLogo from '../Players/close.svg';
 import SendIcon from './send.svg';
 import cn from './styles.module.scss';
+import Chessgame from '../chess/ui/chessgame';
 
 @observer
 class Game extends React.Component {
@@ -70,54 +71,7 @@ class Game extends React.Component {
                   '00:00:00'
               }
             </div>
-            <main className={cn['game__field']}>
-              {
-                this.context.GameStore.field.map(
-                  (value, idx) =>
-                    <div
-                      key={idx}
-                      className={
-                        [
-                          cn['game__cell'],
-                          ...this.context.GameStore.game?.winPosition?.includes(idx) ?
-                            [
-                              this.context.GameStore.game.winner === this.context.GameStore.game.playerOne ?
-                                cn['game__cell_cross-win'] :
-                                cn['game__cell_circle-win']
-                            ] :
-                            []
-                        ].join(' ')
-                      }
-                      onClick={() => this.context.GameStore.makeMove(idx)}
-                    >
-                      {
-                        value &&
-                        (
-                          value === 'X' ?
-                            <CrossIcon
-                              className={
-                                [
-                                  cn['game__player-icon'],
-                                  cn['game__player-icon_cross'],
-                                  cn['game__player-icon_field-size']
-                                ].join(' ')
-                              }
-                            /> :
-                            <CircleIcon
-                              className={
-                                [
-                                  cn['game__player-icon'],
-                                  cn['game__player-icon_circle'],
-                                  cn['game__player-icon_field-size']
-                                ].join(' ')
-                              }
-                            />
-                        )
-                      }
-                    </div>
-                )
-              }
-            </main>
+            <Chessgame/>
           </div>
           <aside className={`${cn['game__chat']} ${cn['chat']}`}>
             <div className={cn['chat__messages']}>
