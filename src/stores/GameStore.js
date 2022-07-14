@@ -1,9 +1,16 @@
 import {action, computed, flow, makeObservable, observable} from 'mobx';
 import Api from '../utils/Api';
+import Game from '../components/chess/model/chess'
+import Square from '../components/chess/model/square'
 
 class GameStore {
   @observable game = null;
+  @observable gameState = new Game(true);
   @observable error = null;
+  @observable draggedPieceTargetId = '';
+  @observable playerTurnToMoveIsWhite = true;
+  @observable whiteKingInCheck = false;
+  @observable blackKingInCheck = false;
   timer = null;
 
   constructor(AuthStore, RouterStore, socket) {
@@ -14,7 +21,7 @@ class GameStore {
     this.socket = socket;
 
     this.socket.on('games:connected', (game) => this.onConnected(game))
-    this.socket.on('games:move-made', ({position}) => this.onMoveMade(position))
+    this.socket.on('games:move-made', (move) => this.onMoveMade(move))
     this.socket.on('games:finished', ({winner, winPosition}) => this.onFinished(winner, winPosition));
     this.socket.on('games:already-finished', () => this.setError('Игра уже завершена'));
     this.socket.on('games:not-invited', () => this.setError('Вы не приглашены в эту игру'));
@@ -22,12 +29,22 @@ class GameStore {
     this.socket.on('games:message', ({player, message}) => this.onReceive(player, message));
   }
 
-  @action makeMove(position) {
-    this.socket.emit('games:make-move', this.game.id, position);
+  @action makeMove(selectedId, finalPosition) {
+    this.socket.emit(
+      'games:make-move',
+      {
+        nextPlayerColorToMove: !this.gameState?.thisPlayersColorIsWhite,
+        playerColorThatJustMovedIsWhite: this.gameState?.thisPlayersColorIsWhite,
+        selectedId: selectedId,
+        finalPosition: finalPosition,
+        gameId: this.game?.id
+      }
+    );
   }
 
   @action close() {
     this.game = null;
+    this.gameState = null;
   }
 
   @action setError(error) {
@@ -48,6 +65,7 @@ class GameStore {
 
   @action onConnected(game) {
     this.game = {...game, time: 0, finished: false, winner: null, winPosition: null};
+    this.gameState = new Game(this.color);
     this.timer = setInterval(
       () => this.increment(),
       1000
@@ -63,12 +81,103 @@ class GameStore {
     this.game.time = this.game.time + 1;
   }
 
-  @action onMoveMade(position) {
+  @action onMoveMade(move) {
     if(!this.game) {
       return;
     }
 
-    this.game.moves.push({position, number: this.game.moves.length + 1});
+    if (move.playerColorThatJustMovedIsWhite !== this.color) {
+      this.movePiece(move.selectedId, move.finalPosition, this.state.gameState, false);
+      this.playerTurnToMoveIsWhite = !move.playerColorThatJustMovedIsWhite;
+    }
+  }
+
+  @action movePiece = (selectedId, finalPosition, currentGame, isMyMove) => {
+    let whiteKingInCheck = false;
+    let blackKingInCheck = false;
+    let blackCheckmated = false;
+    let whiteCheckmated = false;
+    const update = currentGame.movePiece(selectedId, finalPosition, isMyMove);
+
+    if (update === "moved in the same position.") {
+      this.revertToPreviousState(selectedId);
+
+      return;
+    }
+    if (update === "user tried to capture their own piece") {
+      this.revertToPreviousState(selectedId);
+
+      return;
+    }
+    if (update === "invalid move") {
+      this.revertToPreviousState(selectedId);
+
+      return;
+    }
+    if (update === "b is in check" || update === "w is in check") {
+      if(update[0] === "b") {
+        blackKingInCheck = true;
+      } else {
+        whiteKingInCheck = true;
+      }
+    }
+    if (update === "b has been checkmated" || update === "w has been checkmated") {
+      if(update[0] === "b") {
+        blackCheckmated = true;
+      } else {
+        whiteCheckmated = true;
+      }
+    }
+
+    if (isMyMove) {
+      this.makeMove(selectedId, finalPosition);
+    }
+
+    // this.props.playAudio();
+
+    this.draggedPieceTargetId = '';
+    this.gameState = currentGame;
+    this.playerTurnToMoveIsWhite = !this.color;
+    this.whiteKingInCheck = whiteKingInCheck;
+    this.blackKingInCheck = blackKingInCheck;
+
+    if (blackCheckmated) {
+      alert("WHITE WON BY CHECKMATE!");
+    } else if (whiteCheckmated) {
+      alert("BLACK WON BY CHECKMATE!");
+    }
+  }
+
+
+  @action revertToPreviousState = (selectedId) => {
+    const oldGS = this.gameState;
+    const oldBoard = oldGS.getBoard();
+    const tmpGS = new Game(true);
+    const tmpBoard = [];
+
+    for (let i = 0; i < 8; i++) {
+      tmpBoard.push([]);
+
+      for (let j = 0; j < 8; j++) {
+        if (oldBoard[i][j].getPieceIdOnThisSquare() === selectedId) {
+          tmpBoard[i].push(new Square(j, i, null, oldBoard[i][j].canvasCoord));
+        } else {
+          tmpBoard[i].push(oldBoard[i][j]);
+        }
+      }
+    }
+
+    tmpGS.setBoard(tmpBoard);
+    this.gameState = tmpGS;
+    this.draggedPieceTargetId = '';
+
+    setTimeout(() => {
+      this.gameState = oldGS;
+    });
+  }
+
+  @action setDragged(target) {
+    this.draggedPieceTargetId = target;
   }
 
   @action onFinished(winner, winPosition) {
@@ -85,6 +194,7 @@ class GameStore {
 
   @action clear() {
     this.game = null;
+    this.gameState = null;
   }
 
   @action onReceive(player, message) {
@@ -117,20 +227,8 @@ class GameStore {
       .get(`/api/statistics/${this.game.playerTwoId}`);
   }
 
-  @computed get field() {
-    if(!this.game) {
-      return Array.from({length: 3 * 3});
-    }
-
-    const size = this.game?.size || 3;
-
-    return this.game.moves.reduce(
-      (field, {position, number}) => Object.values({
-        ...Object.fromEntries(Object.entries(field)),
-        [position]: number % 2 === 1 ? 'X' : 'O'
-      }),
-      Array.from({length: size * size})
-    );
+  @computed get color() {
+    return this.game?.playerOneId === this.AuthStore.user.id;
   }
 }
 
