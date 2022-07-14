@@ -61,12 +61,6 @@ class Game {
       return "moved in the same position.";
     }
 
-    /**
-     * In order for this method to do anything meaningful,
-     * the 'reassign const' line of code must run. Therefore,
-     * for it to run, we must check first that the given move is valid.
-     */
-
     const isPromotion = this.isPawnPromotion(to, pieceId[1]);
     const moveAttempt = !isPromotion ?
       this.chess.move({
