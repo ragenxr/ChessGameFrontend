@@ -5,7 +5,7 @@ import Square from '../components/chess/model/square'
 
 class GameStore {
   @observable game = null;
-  @observable gameState = new Game(true);
+  @observable gameState = null;
   @observable error = null;
   @observable draggedPieceTargetId = '';
   @observable playerTurnToMoveIsWhite = true;
@@ -38,6 +38,16 @@ class GameStore {
         selectedId: selectedId,
         finalPosition: finalPosition,
         gameId: this.game?.id
+      }
+    );
+  }
+
+  @action finishGame(color) {
+    this.socket.emit(
+      'games:finish-game',
+      {
+        gameId: this.game?.id,
+        player: color
       }
     );
   }
@@ -87,7 +97,7 @@ class GameStore {
     }
 
     if (move.playerColorThatJustMovedIsWhite !== this.color) {
-      this.movePiece(move.selectedId, move.finalPosition, this.state.gameState, false);
+      this.movePiece(move.selectedId, move.finalPosition, this.gameState, false);
       this.playerTurnToMoveIsWhite = !move.playerColorThatJustMovedIsWhite;
     }
   }
@@ -142,12 +152,11 @@ class GameStore {
     this.blackKingInCheck = blackKingInCheck;
 
     if (blackCheckmated) {
-      alert("WHITE WON BY CHECKMATE!");
+      this.finishGame(true);
     } else if (whiteCheckmated) {
-      alert("BLACK WON BY CHECKMATE!");
+      this.finishGame(false);
     }
   }
-
 
   @action revertToPreviousState = (selectedId) => {
     const oldGS = this.gameState;
@@ -186,8 +195,7 @@ class GameStore {
     }
 
     this.game.finished = true;
-    this.game.winner = winner.symbol === 'X' ? this.game.playerOne : this.game.playerTwo;
-    this.game.winPosition = winPosition;
+    this.game.winner = winner ? this.game.playerOne : this.game.playerTwo;
 
     clearInterval(this.timer);
   }
