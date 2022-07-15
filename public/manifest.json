@@ -1,6 +1,6 @@
 {
-  "short_name": "Tic Tac Toe Frontend",
-  "name": "Tic Tac Toe Frontend React",
+  "short_name": "Chess Game Frontend",
+  "name": "Multiplayer Chess Game Frontend React",
   "icons": [
     {
       "src": "favicon.ico",
