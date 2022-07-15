@@ -1,10 +1,10 @@
 import React from 'react'
 import {observer} from 'mobx-react';
 import {Stage, Layer} from 'react-konva';
-import Board from '../assets/chessBoard.png'
+import Board from './assets/chessBoard.png'
 import Piece from './piece'
 import piecemap from './piecemap'
-import {StoreContext} from '../../../stores';
+import {StoreContext} from '../stores';
 
 
 @observer

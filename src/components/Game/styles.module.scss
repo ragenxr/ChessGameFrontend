@@ -42,19 +42,6 @@
   &__player-icon {
     width: 24px;
     height: 24px;
-
-    &_field-size {
-      width: 150px;
-      height: 150px;
-    }
-
-    &_circle {
-      stroke: #E38BAC;
-    }
-
-    &_cross {
-      fill: #60C2AA;
-    }
   }
 
   &__info {
@@ -85,26 +72,13 @@
     width: min-content;
   }
 
-  &__cell {
-    background: #FFFFFF;
-    border-radius: 12px;
-    height: 150px;
-    width: 150px;
-    padding: 10px;
 
-    &_cross-win {
-      background: #CFEDE6;
-    }
-
-    &_circle-win {
-      background: #F3BBD0;
-    }
 
     @media screen and (max-width: 400px) {
       height: 119px;
       width: 119px;
     }
-  }
+
 
   &__chat {
     height: 655px;
@@ -116,7 +90,6 @@
     }
   }
 }
-
 .player-stat {
   &__name {
     composes: text from '../styles.css';
@@ -223,11 +196,11 @@
     margin-right: auto;
 
     &_left {
-      color: #60C2AA;
+      color: #7560c2;
     }
 
     &_right {
-      color: #E38BAC;
+      color: #cf93c5;
     }
   }
 

@@ -75,13 +75,13 @@
 }
 
 .button_primary {
-  background: #60C2AA;
-  color: #FFFFFF;
+  background: #7560c2;
+  color: #f1ebd4;
 }
 
 .button_primary:hover {
-  background: #3BA189;
-  color: #FFFFFF;
+  background: #cf93c5;
+  color: #4b4b4b;
 }
 
 .button_secondary {
@@ -199,11 +199,11 @@
 }
 
 .input__textbox:hover {
-  border-color: #60C2AA;
+  border-color: #7560c2;
 }
 
 .input__textbox:focus {
-  border-color: #3BA189;
+  border-color: #7560c2;
 }
 
 .input__textbox_errored {

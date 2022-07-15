@@ -1,7 +1,7 @@
 import {action, computed, flow, makeObservable, observable} from 'mobx';
-import Api from '../utils/Api';
-import Game from '../components/chess/model/chess'
-import Square from '../components/chess/model/square'
+import Api from '../gateway/Api';
+import Game from '../components/entity/chess'
+import Square from '../components/entity/square'
 
 class GameStore {
   @observable game = null;

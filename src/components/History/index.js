@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {observer} from 'mobx-react';
 import {StoreContext} from '../../stores';
-import CircleIcon from './circle.svg';
-import CrossIcon from './cross.svg';
+import KingBIcon from './ChessKingB.png';
+import KingWIcon from './ChessKingW.png';
 import trophyImg from './trophy.png';
 import cn from './styles.module.scss';
 
@@ -11,7 +11,7 @@ class History extends React.Component {
   static contextType = StoreContext;
 
   async componentDidMount() {
-    if(!this.context.GamesStore.games?.length) {
+    {
       await this.context.GamesStore.fetch();
     }
   }
@@ -37,7 +37,7 @@ class History extends React.Component {
                 ({winner, playerOne, playerTwo, createdAt, finishedAt}) => (
                   <tr className="table__cell">
                     <th className={`${cn['history__player-two']} ${cn['player-row']}`}>
-                      {<CircleIcon className={`${cn['player-row__icon']} ${cn['player-row__icon_circle']}`}/>}
+                    <img className={cn['player-row__logo']} src={KingBIcon} alt='Черные'/>
                       {playerTwo}
                       {
                         winner === 2 &&
@@ -46,7 +46,7 @@ class History extends React.Component {
                     </th>
                     <th className={cn['history__versus']}>против</th>
                     <th className={`${cn['history__player-two']} ${cn['player-row']}`}>
-                      {<CrossIcon className={`${cn['player-row__icon']} ${cn['player-row__icon_cross']}`}/>}
+                    <img className={cn['player-row__logo']} src={KingWIcon} alt='Белые'/>
                       {playerOne}
                       {
                         winner === 1 &&

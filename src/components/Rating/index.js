@@ -8,7 +8,7 @@ class Rating extends React.Component {
   static contextType = StoreContext;
 
   async componentDidMount() {
-    if(!this.context.RatingStore.ratings?.length) {
+    {
       await this.context.RatingStore.fetch();
     }
   }

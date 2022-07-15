@@ -13,10 +13,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 16px;
-    width: calc(16px * 4);
-    fill: #E38BAC;
-    stroke: #E38BAC;
+    height: 48px;
+    width: calc(48px * 4);
+    
   }
 
   &__links {
@@ -39,15 +38,15 @@
     line-height: 24px;
 
     &:hover {
-      background: #F7F7F7;
+      background: #7560c2;
     }
 
     &_active {
-      background: #60C2AA;
+      background: #cf93c5;
       color: #FFFFFF;
 
       &:hover {
-        background: #60C2AA;
+        background: #7560c2;
         color: #FFFFFF;
       }
     }

@@ -1,5 +1,5 @@
 import {flow, makeObservable, observable} from 'mobx';
-import Api from '../utils/Api';
+import Api from '../gateway/Api';
 
 class GamesStore {
   @observable games = [];

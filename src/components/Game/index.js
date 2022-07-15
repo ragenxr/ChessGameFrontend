@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {observer} from 'mobx-react';
 import {StoreContext} from '../../stores';
-import CrossIcon from '../History/cross.svg';
-import CircleIcon from '../History/circle.svg';
+import KingWIcon from '../History/ChessKingW.png';
+import KingBIcon from '../History/ChessKingB.png';
 import CloseLogo from '../Players/close.svg';
 import SendIcon from './send.svg';
 import cn from './styles.module.scss';
-import Chessgame from '../chess/ui/chessgame';
+import Chessgame from '../chessgame';
 
 @observer
 class Game extends React.Component {
@@ -30,7 +30,7 @@ class Game extends React.Component {
               {
                 this.context.GameStore.game?.playerOne &&
                 <>
-                  <CrossIcon className={`${cn['game__player-icon']} ${cn['game__player-icon_cross']}`}/>
+                  <img className={cn['game__plyer-icon']} src={KingWIcon} alt='Белые'/>
                   <div className={cn['player-stat']}>
                     <p className={cn['player-stat__name']}>{this.context.GameStore.game?.playerOne}</p>
                     <small className={cn['player-stat__win-rate']}>
@@ -47,7 +47,7 @@ class Game extends React.Component {
               {
                 this.context.GameStore.game?.playerTwo &&
                 <>
-                  <CrossIcon className={`${cn['game__player-icon']} ${cn['game__player-icon_circle']}`}/>
+                  <img className={cn['game__player-icon']} src={KingBIcon} alt='Черные'/>
                   <div className={cn['player-stat']}>
                     <p className={cn['player-stat__name']}>{this.context.GameStore.game?.playerTwo}</p>
                     <small className={cn['player-stat__win-rate']}>
