@@ -30,7 +30,7 @@ class Game extends React.Component {
               {
                 this.context.GameStore.game?.playerOne &&
                 <>
-                  <img className={cn['game__plyer-icon']} src={KingWIcon} alt='Белые'/>
+                  <img className={cn['game__player-icon']} src={KingWIcon} alt='Белые'/>
                   <div className={cn['player-stat']}>
                     <p className={cn['player-stat__name']}>{this.context.GameStore.game?.playerOne}</p>
                     <small className={cn['player-stat__win-rate']}>

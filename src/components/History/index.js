@@ -37,7 +37,7 @@ class History extends React.Component {
                 ({winner, playerOne, playerTwo, createdAt, finishedAt}) => (
                   <tr className="table__cell">
                     <th className={`${cn['history__player-two']} ${cn['player-row']}`}>
-                    <img className={cn['player-row__logo']} src={KingBIcon} alt='Черные'/>
+                    <img className={cn['player-row__icon']} src={KingBIcon} alt='Черные'/>
                       {playerTwo}
                       {
                         winner === 2 &&
@@ -46,7 +46,7 @@ class History extends React.Component {
                     </th>
                     <th className={cn['history__versus']}>против</th>
                     <th className={`${cn['history__player-two']} ${cn['player-row']}`}>
-                    <img className={cn['player-row__logo']} src={KingWIcon} alt='Белые'/>
+                    <img className={cn['player-row__icon']} src={KingWIcon} alt='Белые'/>
                       {playerOne}
                       {
                         winner === 1 &&

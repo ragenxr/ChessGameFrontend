@@ -39,10 +39,14 @@ class UsersStore {
     if(!user) {
       return;
     }
+    
+    const res = yield new Api(this.AuthStore.token)
+    .put(`/api/users/${userId}`, {status});
 
-    yield new Api(this.AuthStore.token)
-      .put(`/api/users/${userId}`, {status});
-
+    if (!res) {
+    return;
+    }
+   
     user.status = status;
     user.updatedAt = new Date().toUTCString();
   }
